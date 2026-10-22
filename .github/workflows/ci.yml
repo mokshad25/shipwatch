@@ -1,0 +1,37 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint-test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: shipwatch
+          POSTGRES_PASSWORD: shipwatch
+          POSTGRES_DB: shipwatch
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U shipwatch -d shipwatch"
+          --health-interval 2s
+          --health-timeout 3s
+          --health-retries 30
+    env:
+      DATABASE_URL: postgresql+asyncpg://shipwatch:shipwatch@localhost:5432/shipwatch
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - run: uv sync --frozen
+      - name: ruff
+        run: |
+          uv run ruff check .
+          uv run ruff format --check .
+      - name: pytest
+        run: uv run pytest

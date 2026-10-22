@@ -1,0 +1,38 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: shipwatch
+      POSTGRES_PASSWORD: shipwatch
+      POSTGRES_DB: shipwatch
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shipwatch -d shipwatch"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  ingester:
+    build:
+      context: .
+      dockerfile: services/ingester/Dockerfile
+    env_file: .env
+    environment:
+      # Inside the compose network Postgres is reachable by service name.
+      DATABASE_URL: postgresql+asyncpg://shipwatch:shipwatch@postgres:5432/shipwatch
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/healthz')"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:
