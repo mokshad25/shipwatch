@@ -53,6 +53,8 @@ class PullRequest(Base):
     base_branch: Mapped[str] = mapped_column(String(255))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     merged_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    # GitHub's pull_request.updated_at; guards against older deliveries overwriting newer state.
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
 
 class WebhookEvent(Base):

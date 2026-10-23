@@ -56,3 +56,36 @@ def test_upgrade_downgrade_roundtrip_matches_models():
         assert asyncio.run(schema_diff(schema)) == []
     finally:
         asyncio.run(run_sql(f'DROP SCHEMA "{schema}" CASCADE'))
+
+
+def test_0003_backfills_updated_at_from_newest_stored_payload():
+    schema = f"mig_{uuid.uuid4().hex[:12]}"
+    asyncio.run(run_sql(f'CREATE SCHEMA "{schema}"'))
+    try:
+        cfg = alembic_config(schema)
+        command.upgrade(cfg, "0002")
+        for sql in (
+            f"INSERT INTO \"{schema}\".repos VALUES (1, 'o/r')",
+            f'INSERT INTO "{schema}".pull_requests VALUES '
+            "(10, 1, 1, 't', 'a', 'closed', 'sha', 'sandbox', '2026-10-01T00:00:00Z', NULL)",
+            f'INSERT INTO "{schema}".webhook_events (delivery_id, event_type, action, payload) '
+            "VALUES ('d1', 'pull_request', 'opened', "
+            '\'{"pull_request": {"id": 10, "updated_at": "2026-10-01T00:00:00Z"}}\'), '
+            "('d2', 'pull_request', 'closed', "
+            '\'{"pull_request": {"id": 10, "updated_at": "2026-10-02T00:00:00Z"}}\')',
+        ):
+            asyncio.run(run_sql(sql))
+        command.upgrade(cfg, "0003")
+
+        async def updated_at():
+            engine = make_engine(DatabaseSettings().database_url)
+            async with engine.connect() as conn:
+                value = await conn.scalar(
+                    text(f'SELECT updated_at::text FROM "{schema}".pull_requests WHERE id = 10')
+                )
+            await engine.dispose()
+            return value
+
+        assert asyncio.run(updated_at()).startswith("2026-10-02")
+    finally:
+        asyncio.run(run_sql(f'DROP SCHEMA "{schema}" CASCADE'))

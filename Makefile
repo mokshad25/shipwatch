@@ -1,4 +1,7 @@
-.PHONY: up down logs db test lint fmt migrate
+.PHONY: up down logs db test lint fmt migrate forward capture sandbox-pr
+
+# Where `make forward` delivers: 8000 = ingester, 8001 = capture relay (`make forward FORWARD_PORT=8001`).
+FORWARD_PORT ?= 8000
 
 up: .env ## Build and start Postgres + ingester, wait until healthy
 	docker compose up --build -d --wait
@@ -25,6 +28,21 @@ fmt: ## Format and autofix
 
 migrate: db ## Apply database migrations
 	uv run alembic -c libs/common/alembic.ini upgrade head
+
+forward: .env ## Forward this repo's pull_request webhooks to the local ingester (gh-webhook)
+	@set -a; . ./.env; set +a; \
+	if [ -z "$${GITHUB_REPO:-}" ] || [ "$$GITHUB_REPO" = "your-user/your-repo" ]; then \
+		echo "Set GITHUB_REPO in .env" >&2; exit 1; fi; \
+	if [ -z "$${GITHUB_WEBHOOK_SECRET:-}" ] || [ "$$GITHUB_WEBHOOK_SECRET" = "change-me" ]; then \
+		echo "Set GITHUB_WEBHOOK_SECRET in .env" >&2; exit 1; fi; \
+	gh webhook forward --repo="$$GITHUB_REPO" --events=pull_request \
+		--url="http://localhost:$(FORWARD_PORT)/webhooks/github" --secret="$$GITHUB_WEBHOOK_SECRET"
+
+capture: ## Save each forwarded delivery as a test fixture and relay it to the ingester (:8001)
+	uv run python scripts/capture_webhooks.py
+
+sandbox-pr: .env ## Open, update, close, reopen and merge a throwaway PR against `sandbox`
+	./scripts/sandbox_pr.sh
 
 .env:
 	cp .env.example .env

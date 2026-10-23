@@ -17,20 +17,20 @@ def _ts(value: str | None) -> datetime | None:
     return datetime.fromisoformat(value) if value else None
 
 
-async def store_pull_request_event(
-    session: AsyncSession, *, delivery_id: str, payload: dict[str, Any]
+async def record_delivery(
+    session: AsyncSession, *, delivery_id: str, event_type: str, payload: dict[str, Any]
 ) -> None:
-    """Record the delivery and upsert its repo and pull request. Caller owns the transaction.
+    """Insert the webhook_events row for this delivery. Caller owns the transaction.
 
-    The event row goes first so a duplicate delivery fails before touching anything else. We
-    don't check-then-insert: the unique constraint decides, which also covers two identical
-    deliveries racing (the second INSERT waits for the first transaction, then violates).
-    Raises DuplicateDeliveryError; the caller's transaction must then be rolled back.
+    Call this first in the transaction so a duplicate delivery fails before touching anything
+    else. We don't check-then-insert: the unique constraint decides, which also covers two
+    identical deliveries racing (the second INSERT waits for the first transaction, then
+    violates). Raises DuplicateDeliveryError; the caller's transaction must then be rolled back.
     """
     session.add(
         WebhookEvent(
             delivery_id=delivery_id,
-            event_type="pull_request",
+            event_type=event_type,
             action=payload.get("action"),
             payload=payload,
         )
@@ -42,6 +42,14 @@ async def store_pull_request_event(
             raise
         raise DuplicateDeliveryError(delivery_id) from exc
 
+
+async def upsert_pull_request(session: AsyncSession, payload: dict[str, Any]) -> None:
+    """Upsert the repo and pull request described by a pull_request event payload.
+
+    GitHub doesn't guarantee delivery order, so the PR row is only overwritten by a payload whose
+    `updated_at` is not older than the stored one; a late, stale delivery leaves it alone (the
+    delivery itself is still recorded in webhook_events).
+    """
     repo = payload["repository"]
     repo_stmt = insert(Repo).values(id=repo["id"], full_name=repo["full_name"])
     await session.execute(
@@ -61,11 +69,13 @@ async def store_pull_request_event(
         "base_branch": pr["base"]["ref"],
         "created_at": _ts(pr["created_at"]),
         "merged_at": _ts(pr.get("merged_at")),
+        "updated_at": _ts(pr["updated_at"]),
     }
     pr_stmt = insert(PullRequest).values(id=pr["id"], **values)
     await session.execute(
         pr_stmt.on_conflict_do_update(
             index_elements=[PullRequest.id],
             set_={k: pr_stmt.excluded[k] for k in values},
+            where=PullRequest.updated_at <= pr_stmt.excluded.updated_at,
         )
     )

@@ -1,6 +1,5 @@
 from datetime import UTC, datetime
 
-import pytest
 from shipwatch_common.models import PullRequest, Repo, WebhookEvent
 from sqlalchemy import func, select
 
@@ -51,20 +50,52 @@ async def test_later_events_update_the_same_pull_request(db, send, pr_payload):
     assert pr.merged_at == datetime(2026, 10, 27, 9, 30, tzinfo=UTC)
 
 
-async def test_non_pull_request_event_is_accepted_but_not_stored(db, send):
-    resp = await send({"zen": "Design for failure."}, event="ping")
+async def test_non_pull_request_event_is_recorded_but_ignored(db, send):
+    resp = await send({"zen": "Design for failure."}, event="ping", delivery="d-ping")
 
-    assert resp.status_code == 202
-    assert await count(db, WebhookEvent) == 0
+    assert (resp.status_code, resp.json()) == (202, {"status": "ignored"})
+    async with db() as session:
+        event = await session.scalar(select(WebhookEvent))
+    assert (event.delivery_id, event.event_type, event.action) == ("d-ping", "ping", None)
+    assert event.payload == {"zen": "Design for failure."}
+    assert await count(db, PullRequest) == 0
+    assert await count(db, Repo) == 0
+
+
+async def test_duplicate_ignored_event_is_reported_as_duplicate(db, send):
+    await send({"zen": "hi"}, event="ping", delivery="d-ping")
+    resp = await send({"zen": "hi"}, event="ping", delivery="d-ping")
+
+    assert (resp.status_code, resp.json()) == (200, {"status": "duplicate"})
+    assert await count(db, WebhookEvent) == 1
 
 
 async def test_failure_mid_transaction_stores_nothing(db, send, pr_payload):
     payload = pr_payload()
     del payload["pull_request"]["head"]  # breaks the PR upsert after the event row is flushed
 
-    # ASGITransport re-raises app exceptions; behind uvicorn this is a 500.
-    with pytest.raises(KeyError):
-        await send(payload)
+    resp = await send(payload)
+
+    assert resp.status_code == 500
 
     assert await count(db, WebhookEvent) == 0
     assert await count(db, Repo) == 0
+
+
+async def test_stale_out_of_order_delivery_does_not_overwrite_newer_state(db, send, pr_payload):
+    newer = pr_payload(
+        action="closed",
+        state="closed",
+        merged_at="2026-10-27T09:30:00Z",
+        updated_at="2026-10-27T09:30:00Z",
+    )
+    older = pr_payload(action="synchronize", head_sha="b" * 40, updated_at="2026-10-26T12:00:00Z")
+
+    assert (await send(newer)).status_code == 202
+    assert (await send(older)).status_code == 202  # arrives late, new delivery id
+
+    async with db() as session:
+        pr = await session.get(PullRequest, 1001)
+    assert (pr.state, pr.head_sha) == ("closed", "a" * 40)
+    assert pr.merged_at == datetime(2026, 10, 27, 9, 30, tzinfo=UTC)
+    assert await count(db, WebhookEvent) == 2  # the stale delivery is still recorded

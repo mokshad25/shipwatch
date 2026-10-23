@@ -21,4 +21,5 @@ RUN uv sync --frozen --no-dev --package ingester
 
 ENV PATH="/app/.venv/bin:$PATH"
 EXPOSE 8000
-CMD ["uvicorn", "ingester.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Access logging comes from our middleware (JSON, with delivery_id), so uvicorn's is off.
+CMD ["uvicorn", "ingester.main:app", "--host", "0.0.0.0", "--port", "8000", "--no-access-log"]

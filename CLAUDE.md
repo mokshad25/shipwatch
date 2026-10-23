@@ -52,7 +52,7 @@ Each service keeps its tests in `services/<name>/tests/`. The repo is a **uv wor
 | Storage | Postgres 16, SQLAlchemy 2.x (async, asyncpg), Alembic; Redis 7 (wk2); MongoDB 7 (wk3) |
 | Messaging | Redpanda (Kafka API) + confluent-kafka (wk2) |
 | LLM | LangChain tool calling, Anthropic or OpenAI via `LLM_PROVIDER` (wk3) |
-| Logs / ML | structlog (JSON), drain3 (wk4) |
+| Logs / ML | structlog JSON logs (wk1), drain3 (wk4) |
 | Ops | prometheus-client, Prometheus, Grafana, Alertmanager, Sentry (wk6) |
 | Frontend | React + Vite + TypeScript (wk7) |
 | Deploy | Docker (multi-stage, uv), Kustomize, k3s/k3d, AWS EC2, GitHub Actions + GHCR (wk8) |

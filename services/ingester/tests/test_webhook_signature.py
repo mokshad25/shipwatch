@@ -1,8 +1,9 @@
 import json
+import os
 
 from ingester.signature import sign, verify_signature
 
-SECRET = b"test-secret"
+SECRET = os.environ["GITHUB_WEBHOOK_SECRET"].encode()  # the test secret set by conftest
 BODY = json.dumps({"zen": "Keep it logically awesome."}).encode()
 
 
@@ -13,11 +14,12 @@ def headers(signature: str | None, event: str = "ping", delivery: str = "d-1") -
     return h
 
 
-async def test_valid_signature_is_accepted(client):
+async def test_valid_signature_is_accepted(db, client):
     resp = await client.post("/webhooks/github", content=BODY, headers=headers(sign(SECRET, BODY)))
 
+    # A valid ping passes the signature check; it isn't a pull_request event, so it's "ignored".
     assert resp.status_code == 202
-    assert resp.json() == {"status": "accepted"}
+    assert resp.json() == {"status": "ignored"}
 
 
 async def test_wrong_signature_is_rejected(client):

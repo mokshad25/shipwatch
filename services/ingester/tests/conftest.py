@@ -3,8 +3,9 @@ import os
 import uuid
 from typing import Any
 
-# Must be set before the app (and its Settings) is imported.
-os.environ.setdefault("GITHUB_WEBHOOK_SECRET", "test-secret")
+# Must be set before the app (and its Settings) is imported. Always overrides any real secret
+# exported in the shell, so tests only ever sign with this throwaway value.
+os.environ["GITHUB_WEBHOOK_SECRET"] = "test-secret-not-for-production"
 
 import httpx  # noqa: E402
 import pytest  # noqa: E402
@@ -66,6 +67,7 @@ def make_pr_payload(
     state: str = "open",
     head_sha: str = "a" * 40,
     merged_at: str | None = None,
+    updated_at: str = "2026-10-26T10:00:00Z",
 ) -> dict[str, Any]:
     """Minimal pull_request payload with the fields the ingester reads (shape matches GitHub)."""
     return {
@@ -81,6 +83,7 @@ def make_pr_payload(
             "base": {"ref": "main"},
             "created_at": "2026-10-26T10:00:00Z",
             "merged_at": merged_at,
+            "updated_at": updated_at,
         },
         "repository": {"id": 501, "full_name": "octo/sandbox"},
     }
