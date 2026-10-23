@@ -9,10 +9,7 @@ on:
 jobs:
   lint-test:
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:16
-        env:
+    env:
           POSTGRES_USER: shipwatch
           POSTGRES_PASSWORD: shipwatch
           POSTGRES_DB: shipwatch
@@ -31,6 +28,11 @@ jobs:
         with:
           enable-cache: true
       - run: uv sync --frozen
+      # Same containers as `make deps` locally, so CI tests against real Postgres, Redpanda and Redis.
+      - name: start dependencies
+        run: |
+          cp .env.example .env
+          docker compose up -d --wait postgres redpanda redis
       - name: ruff
         run: |
           uv run ruff check .

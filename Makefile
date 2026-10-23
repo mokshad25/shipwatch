@@ -1,21 +1,24 @@
-.PHONY: up down logs db test lint fmt migrate forward capture sandbox-pr
+.PHONY: up down logs db deps test lint fmt migrate forward capture sandbox-pr
 
 # Where `make forward` delivers: 8000 = ingester, 8001 = capture relay (`make forward FORWARD_PORT=8001`).
 FORWARD_PORT ?= 8000
 
-up: .env ## Build and start Postgres + ingester, wait until healthy
+up: .env ## Build and start the whole stack (Postgres, Redpanda + Console, ingester), wait until healthy
 	docker compose up --build -d --wait
 
 down: ## Stop all containers (data volume is kept)
 	docker compose down
 
-logs: ## Follow ingester logs
-	docker compose logs -f ingester
+logs: ## Follow ingester and worker logs
+	docker compose logs -f ingester worker
 
 db: ## Start only Postgres and wait until it accepts connections
 	docker compose up -d --wait postgres
 
-test: db ## Run the test suite against the compose Postgres
+deps: ## Start what the tests need (Postgres, Redpanda, Redis) and wait until healthy
+	docker compose up -d --wait postgres redpanda redis
+
+test: deps ## Run the test suite against the compose Postgres and Redpanda
 	uv run pytest
 
 lint: ## Lint and check formatting

@@ -11,9 +11,8 @@ import httpx  # noqa: E402
 import pytest  # noqa: E402
 from ingester.main import app  # noqa: E402
 from ingester.signature import sign  # noqa: E402
-from shipwatch_common.db import make_engine, make_sessionmaker  # noqa: E402
+from shipwatch_common.db import make_sessionmaker  # noqa: E402
 from shipwatch_common.models import Base  # noqa: E402
-from shipwatch_common.settings import get_settings  # noqa: E402
 from sqlalchemy import text  # noqa: E402
 
 SECRET = os.environ["GITHUB_WEBHOOK_SECRET"].encode()
@@ -25,26 +24,6 @@ async def client():
     transport = httpx.ASGITransport(app=app)
     async with httpx.AsyncClient(transport=transport, base_url="http://test") as c:
         yield c
-
-
-@pytest.fixture(scope="session")
-async def db_engine():
-    """Engine bound to a fresh schema in the real Postgres; the schema is dropped afterwards."""
-    url = get_settings().database_url
-    schema = f"test_{uuid.uuid4().hex[:12]}"
-    admin = make_engine(url)
-    async with admin.begin() as conn:
-        await conn.execute(text(f'CREATE SCHEMA "{schema}"'))
-
-    engine = make_engine(url, connect_args={"server_settings": {"search_path": schema}})
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-    yield engine
-
-    await engine.dispose()
-    async with admin.begin() as conn:
-        await conn.execute(text(f'DROP SCHEMA "{schema}" CASCADE'))
-    await admin.dispose()
 
 
 @pytest.fixture

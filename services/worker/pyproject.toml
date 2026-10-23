@@ -1,0 +1,21 @@
+[project]
+name = "worker"
+version = "0.1.0"
+description = "Kafka consumer that processes pr-events for Shipwatch"
+requires-python = ">=3.12"
+dependencies = [
+    "shipwatch-common",
+]
+
+[project.scripts]
+worker = "worker.main:main"
+
+[tool.uv.sources]
+shipwatch-common = { workspace = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/worker"]

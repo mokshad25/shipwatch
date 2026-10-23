@@ -12,7 +12,9 @@ ENV UV_COMPILE_BYTECODE=1 \
 # Dependencies first so they cache independently of source changes.
 COPY pyproject.toml uv.lock .python-version ./
 COPY libs/common/pyproject.toml libs/common/
+# Every workspace member's pyproject, or uv can't resolve the lockfile.
 COPY services/ingester/pyproject.toml services/ingester/
+COPY services/worker/pyproject.toml services/worker/
 RUN uv sync --frozen --no-dev --package ingester --no-install-workspace
 
 COPY libs/common libs/common

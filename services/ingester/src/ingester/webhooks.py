@@ -2,10 +2,16 @@ import json
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Header, HTTPException, Request, Response, status
+from shipwatch_common.kafka import EventEnvelope
 from shipwatch_common.logging import get_logger
 from shipwatch_common.settings import Settings, get_settings
 
-from ingester.persistence import DuplicateDeliveryError, record_delivery, upsert_pull_request
+from ingester.persistence import (
+    DuplicateDeliveryError,
+    enqueue_event,
+    record_delivery,
+    upsert_pull_request,
+)
 from ingester.signature import verify_signature
 
 log = get_logger(__name__)
@@ -62,6 +68,18 @@ async def github_webhook(
             )
             if is_pull_request:
                 await upsert_pull_request(session, payload)
+                envelope = EventEnvelope(
+                    delivery_id=x_github_delivery,
+                    type=f"{x_github_event}.{payload.get('action')}",
+                    payload=payload,
+                )
+                # Same transaction as the delivery: published by the relay iff this commits.
+                await enqueue_event(
+                    session,
+                    topic=settings.pr_events_topic,
+                    key=payload["repository"]["full_name"],
+                    envelope=envelope,
+                )
     except DuplicateDeliveryError:
         log.info("webhook duplicate")
         response.status_code = status.HTTP_200_OK
@@ -70,5 +88,9 @@ async def github_webhook(
     if not is_pull_request:
         log.info("webhook ignored", action=payload.get("action"))
         return {"status": "ignored"}
-    log.info("webhook stored", action=payload.get("action"))
+    # Nudge the relay so it publishes now rather than at its next poll; never wait on Kafka here.
+    relay = getattr(request.app.state, "relay", None)
+    if relay is not None:
+        relay.wake()
+    log.info("webhook stored", action=payload.get("action"), event_id=str(envelope.event_id))
     return {"status": "accepted"}

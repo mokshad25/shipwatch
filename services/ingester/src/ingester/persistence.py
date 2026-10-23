@@ -1,7 +1,8 @@
 from datetime import datetime
 from typing import Any
 
-from shipwatch_common.models import PullRequest, Repo, WebhookEvent
+from shipwatch_common.kafka import EventEnvelope
+from shipwatch_common.models import Outbox, PullRequest, Repo, WebhookEvent
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -77,5 +78,20 @@ async def upsert_pull_request(session: AsyncSession, payload: dict[str, Any]) ->
             index_elements=[PullRequest.id],
             set_={k: pr_stmt.excluded[k] for k in values},
             where=PullRequest.updated_at <= pr_stmt.excluded.updated_at,
+        )
+    )
+
+
+async def enqueue_event(
+    session: AsyncSession, *, topic: str, key: str, envelope: EventEnvelope
+) -> None:
+    """Add an outbox row for `envelope`. Caller owns the transaction: the row commits (and is later
+    published by the relay) only if the rest of the transaction does."""
+    session.add(
+        Outbox(
+            event_id=envelope.event_id,
+            topic=topic,
+            key=key,
+            envelope=envelope.model_dump(mode="json"),
         )
     )

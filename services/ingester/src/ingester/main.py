@@ -1,3 +1,4 @@
+import asyncio
 import time
 from collections.abc import AsyncIterator, Awaitable, Callable
 from contextlib import asynccontextmanager
@@ -6,10 +7,12 @@ import structlog
 from fastapi import FastAPI, Request, Response, status
 from fastapi.responses import JSONResponse
 from shipwatch_common.db import make_engine, make_sessionmaker
+from shipwatch_common.kafka import Producer
 from shipwatch_common.logging import configure_logging, get_logger
 from shipwatch_common.settings import get_settings
 
 from ingester import webhooks
+from ingester.relay import OutboxRelay
 
 log = get_logger(__name__)
 
@@ -22,7 +25,14 @@ def create_app() -> FastAPI:
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         engine = make_engine(settings.database_url)
         app.state.sessionmaker = make_sessionmaker(engine)
+        producer = Producer(settings.kafka_bootstrap_servers)
+        app.state.relay = OutboxRelay(app.state.sessionmaker, producer)
+        relay_task = asyncio.create_task(app.state.relay.run())
         yield
+        # Finish the batch in flight; unsent rows stay in the outbox for the next start.
+        app.state.relay.stop()
+        await relay_task
+        producer.close()
         await engine.dispose()
 
     app = FastAPI(title="shipwatch-ingester", lifespan=lifespan)

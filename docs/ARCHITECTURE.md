@@ -1,6 +1,8 @@
 # Architecture
 
-Final system (week 8). Week 1 builds only the ingester and Postgres.
+Final system (week 8). Built so far: the ingester with its outbox relay (weeks 1–2), Redpanda, and the
+worker's consume / retry / DLQ / Redis-dedupe loop (week 2), which records events until the PR risk
+agent arrives in week 3. Week 2's delivery guarantees: [SPEC_W2.md](SPEC_W2.md).
 
 ```mermaid
 flowchart LR

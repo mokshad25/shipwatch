@@ -3,17 +3,18 @@ name = "shipwatch"
 version = "0.1.0"
 description = "Shipwatch workspace root"
 requires-python = ">=3.12"
-dependencies = ["shipwatch-common", "ingester"]
+dependencies = ["shipwatch-common", "ingester", "worker"]
 
 [tool.uv]
 package = false
 
 [tool.uv.workspace]
-members = ["libs/common", "services/ingester"]
+members = ["libs/common", "services/ingester", "services/worker"]
 
 [tool.uv.sources]
 shipwatch-common = { workspace = true }
 ingester = { workspace = true }
+worker = { workspace = true }
 
 [dependency-groups]
 dev = [
@@ -31,7 +32,7 @@ target-version = "py312"
 select = ["E", "F", "I", "UP", "B", "SIM", "ASYNC"]
 
 [tool.pytest.ini_options]
-testpaths = ["libs/common/tests", "services/ingester/tests"]
+testpaths = ["libs/common/tests", "services/ingester/tests", "services/worker/tests"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "session"
 asyncio_default_test_loop_scope = "session"
