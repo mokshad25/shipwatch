@@ -1,0 +1,35 @@
+{
+  "total_count": 6,
+  "check_runs": [
+    {
+      "name": "Python 3.12",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Python 3.14",
+      "status": "completed",
+      "conclusion": "cancelled"
+    },
+    {
+      "name": "Python 3.10",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Python 3.13",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Python 3.11",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Python 3.9",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ]
+}

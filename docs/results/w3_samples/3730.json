@@ -1,0 +1,155 @@
+{
+  "pr": {
+    "merged_at": "2025-12-17T13:05:08Z",
+    "number": 3730,
+    "title": "3.11+"
+  },
+  "verdict": {
+    "repo": "encode/httpx",
+    "pr_number": 3730,
+    "head_sha": "d664166bdae02fd6f1bb71833bb7bbfef2ab7b3d",
+    "level": "low",
+    "score": 6,
+    "reason": null,
+    "assessment": {
+      "factors": [
+        {
+          "kind": "config_change",
+          "severity": 1,
+          "evidence": "Modified .github/workflows/test-suite.yml: removed Python 3.10 from matrix (additions 1, deletions 1)【get_diff†files.0.filename】"
+        }
+      ],
+      "summary": "The PR only changes the CI workflow matrix to drop Python 3.10, a minor configuration change with no code impact. CI passes and the author is experienced, so risk is low.",
+      "confidence": 0.98
+    },
+    "breakdown": {
+      "config_change": 6,
+      "size_lines": 0,
+      "size_files": 0
+    },
+    "rules": []
+  },
+  "trace": {
+    "repo": "encode/httpx",
+    "pr_number": 3730,
+    "provider": "groq",
+    "model": "openai/gpt-oss-120b",
+    "input_cost_per_mtok": 0.15,
+    "output_cost_per_mtok": 0.6,
+    "started_at": "2026-10-23T15:20:16.357824Z",
+    "latency_ms": 24585,
+    "steps": [
+      {
+        "kind": "llm",
+        "name": "turn 1",
+        "args": {},
+        "summary": "1 tool call(s): get_diff",
+        "input_tokens": 501,
+        "output_tokens": 28,
+        "latency_ms": 907,
+        "error": null
+      },
+      {
+        "kind": "tool",
+        "name": "get_diff",
+        "args": {},
+        "summary": "1 files +1/-1, not truncated",
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "latency_ms": 5,
+        "error": null
+      },
+      {
+        "kind": "llm",
+        "name": "turn 2",
+        "args": {},
+        "summary": "1 tool call(s): file_churn",
+        "input_tokens": 763,
+        "output_tokens": 98,
+        "latency_ms": 702,
+        "error": null
+      },
+      {
+        "kind": "tool",
+        "name": "file_churn",
+        "args": {
+          "days": 90,
+          "paths": [
+            ".github/workflows/test-suite.yml"
+          ]
+        },
+        "summary": "1 paths over 90d; top: .github/workflows/test-suite.yml=0",
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "latency_ms": 469,
+        "error": null
+      },
+      {
+        "kind": "llm",
+        "name": "turn 3",
+        "args": {},
+        "summary": "1 tool call(s): author_history",
+        "input_tokens": 876,
+        "output_tokens": 70,
+        "latency_ms": 2141,
+        "error": null
+      },
+      {
+        "kind": "tool",
+        "name": "author_history",
+        "args": {
+          "author": "lovelydinosaur"
+        },
+        "summary": "lovelydinosaur: 489 merged, 1 reverted",
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "latency_ms": 21,
+        "error": null
+      },
+      {
+        "kind": "llm",
+        "name": "turn 4",
+        "args": {},
+        "summary": "1 tool call(s): ci_status",
+        "input_tokens": 1264,
+        "output_tokens": 112,
+        "latency_ms": 661,
+        "error": null
+      },
+      {
+        "kind": "tool",
+        "name": "ci_status",
+        "args": {},
+        "summary": "passing: 4 check runs",
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "latency_ms": 728,
+        "error": null
+      },
+      {
+        "kind": "llm",
+        "name": "turn 5",
+        "args": {},
+        "summary": "done gathering",
+        "input_tokens": 1341,
+        "output_tokens": 520,
+        "latency_ms": 4503,
+        "error": null
+      },
+      {
+        "kind": "llm",
+        "name": "assessment",
+        "args": {},
+        "summary": "1 factor(s), confidence 0.98",
+        "input_tokens": 1816,
+        "output_tokens": 422,
+        "latency_ms": 14433,
+        "error": null
+      }
+    ],
+    "input_tokens": 6561,
+    "output_tokens": 1250,
+    "tool_calls": 4,
+    "cost_usd": 0.001734
+  }
+}

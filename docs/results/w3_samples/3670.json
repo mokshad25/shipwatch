@@ -1,0 +1,44 @@
+{
+  "pr": {
+    "merged_at": "2025-09-18T12:15:06Z",
+    "number": 3670,
+    "title": "Update FileStream API"
+  },
+  "verdict": {
+    "repo": "encode/httpx",
+    "pr_number": 3670,
+    "head_sha": "6ee7a36f3462107f618712c6ba198662b3b2c168",
+    "level": "needs_review",
+    "score": null,
+    "reason": "rate limited after 1 attempt(s): Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_REDACTED` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199092, Requested 1261. Please try again in 2m32.496s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "assessment": null,
+    "breakdown": {},
+    "rules": []
+  },
+  "trace": {
+    "repo": "encode/httpx",
+    "pr_number": 3670,
+    "provider": "groq",
+    "model": "openai/gpt-oss-120b",
+    "input_cost_per_mtok": 0.15,
+    "output_cost_per_mtok": 0.6,
+    "started_at": "2026-10-23T15:25:24.577952Z",
+    "latency_ms": 59,
+    "steps": [
+      {
+        "kind": "llm",
+        "name": "turn 1",
+        "args": {},
+        "summary": "",
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "latency_ms": 57,
+        "error": "RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_REDACTED` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199092, Requested 1261. Please try again in 2m32.496s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+      }
+    ],
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "tool_calls": 0,
+    "cost_usd": 0.0
+  }
+}

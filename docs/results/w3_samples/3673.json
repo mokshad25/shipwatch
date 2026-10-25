@@ -1,0 +1,44 @@
+{
+  "pr": {
+    "merged_at": "2025-09-20T17:09:09Z",
+    "number": 3673,
+    "title": "Connection resets"
+  },
+  "verdict": {
+    "repo": "encode/httpx",
+    "pr_number": 3673,
+    "head_sha": "a711667febc881914bd117d6e86dfbf0b91c9f47",
+    "level": "needs_review",
+    "score": null,
+    "reason": "rate limited after 1 attempt(s): Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_REDACTED` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199098, Requested 1231. Please try again in 2m22.128s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+    "assessment": null,
+    "breakdown": {},
+    "rules": []
+  },
+  "trace": {
+    "repo": "encode/httpx",
+    "pr_number": 3673,
+    "provider": "groq",
+    "model": "openai/gpt-oss-120b",
+    "input_cost_per_mtok": 0.15,
+    "output_cost_per_mtok": 0.6,
+    "started_at": "2026-10-23T15:25:21.784475Z",
+    "latency_ms": 52,
+    "steps": [
+      {
+        "kind": "llm",
+        "name": "turn 1",
+        "args": {},
+        "summary": "",
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "latency_ms": 50,
+        "error": "RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_REDACTED` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199098, Requested 1231. Please try again in 2m22.128s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+      }
+    ],
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "tool_calls": 0,
+    "cost_usd": 0.0
+  }
+}

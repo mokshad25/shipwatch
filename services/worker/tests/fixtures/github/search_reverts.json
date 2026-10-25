@@ -1,0 +1,37 @@
+{
+  "total_count": 4,
+  "items": [
+    {
+      "number": 3192,
+      "title": "Revert \"Removed leading $ from cli code blocks\"",
+      "body": "Reverts encode/httpx#3174\r\n\r\nTried the style without the leading `$ ` prompts, and not sure it's quite right.",
+      "pull_request": {
+        "merged_at": "2024-09-22T20:16:32Z"
+      }
+    },
+    {
+      "number": 2539,
+      "title": "Revert \"Raise `TypeError` on invalid query params. (#2523)\"",
+      "body": "This reverts commit 4cbf13ece2e584b45b935df0a0c670e1863c4569 / PR #2523\r\n\r\nSee discussion at https://github.com/encode/httpx/discussions/2538 and in #2523 \u2014 this change is potentially breaking and should be considered for a future release instead (i.e. 0.24.0).",
+      "pull_request": {
+        "merged_at": "2023-01-04T09:23:33Z"
+      }
+    },
+    {
+      "number": 898,
+      "title": "Revert \"Add `Content-Length` header for empty bytestream\"",
+      "body": "Reverts encode/httpx#866",
+      "pull_request": {
+        "merged_at": "2020-04-08T12:15:23Z"
+      }
+    },
+    {
+      "number": 423,
+      "title": "Revert PR #369",
+      "body": "In my previous PR I found out that tests are failing in travis with python 3.8 due to #369.\r\n\r\nThis PR reverts it, and also updates the python version in travis to use `3.8` instead of `3.8-dev`.\r\n\r\nFixes #420",
+      "pull_request": {
+        "merged_at": "2019-10-03T08:18:10Z"
+      }
+    }
+  ]
+}

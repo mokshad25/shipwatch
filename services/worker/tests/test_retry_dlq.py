@@ -162,3 +162,24 @@ async def test_failed_dlq_publish_does_not_commit(produce, run_worker, settings,
     with pytest.raises(DeadLetterError):
         await asyncio.wait_for(task, 20)
     assert committed_total(settings) == 0  # redelivered after restart, not lost
+
+
+async def test_rate_limit_retry_after_is_honoured_between_attempts(
+    produce, run_worker, make_envelope, wait_for_processed
+):
+    from agent.service import AgentRateLimited
+
+    times: list[float] = []
+    inner = failing(1, AgentRateLimited("429", retry_after=0.8))
+
+    async def _process(sessionmaker, envelope, source):
+        times.append(asyncio.get_running_loop().time())
+        await inner(sessionmaker, envelope, source)
+
+    produce(make_envelope(1))
+    run_worker(process_fn=_process)  # test settings: backoff at most 0.05 s
+
+    await wait_for_processed(1)
+
+    assert len(times) == 2
+    assert times[1] - times[0] >= 0.8

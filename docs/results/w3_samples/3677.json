@@ -1,0 +1,156 @@
+{
+  "pr": {
+    "merged_at": "2025-10-04T17:38:23Z",
+    "number": 3677,
+    "title": "Bump actions/setup-python from 5 to 6"
+  },
+  "verdict": {
+    "repo": "encode/httpx",
+    "pr_number": 3677,
+    "head_sha": "b4d5094df53c98146c17069216e316ef5006ddb1",
+    "level": "low",
+    "score": 6,
+    "reason": null,
+    "assessment": {
+      "factors": [
+        {
+          "kind": "config_change",
+          "severity": 1,
+          "evidence": "get_diff output shows two workflow files modified, each with a single-line change replacing actions/setup-python@v5 with @v6"
+        }
+      ],
+      "summary": "The PR only updates CI workflow configuration to use actions/setup-python v6, affecting two rarely‑changed files. All checks pass and the author (dependabot) has a strong merge history, so the risk of incident is minimal.",
+      "confidence": 0.95
+    },
+    "breakdown": {
+      "config_change": 6,
+      "size_lines": 0,
+      "size_files": 0
+    },
+    "rules": []
+  },
+  "trace": {
+    "repo": "encode/httpx",
+    "pr_number": 3677,
+    "provider": "groq",
+    "model": "openai/gpt-oss-120b",
+    "input_cost_per_mtok": 0.15,
+    "output_cost_per_mtok": 0.6,
+    "started_at": "2026-10-23T15:24:30.379247Z",
+    "latency_ms": 50273,
+    "steps": [
+      {
+        "kind": "llm",
+        "name": "turn 1",
+        "args": {},
+        "summary": "1 tool call(s): get_diff",
+        "input_tokens": 501,
+        "output_tokens": 28,
+        "latency_ms": 3453,
+        "error": null
+      },
+      {
+        "kind": "tool",
+        "name": "get_diff",
+        "args": {},
+        "summary": "2 files +2/-2, not truncated",
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "latency_ms": 7,
+        "error": null
+      },
+      {
+        "kind": "llm",
+        "name": "turn 2",
+        "args": {},
+        "summary": "1 tool call(s): file_churn",
+        "input_tokens": 864,
+        "output_tokens": 102,
+        "latency_ms": 4649,
+        "error": null
+      },
+      {
+        "kind": "tool",
+        "name": "file_churn",
+        "args": {
+          "days": 90,
+          "paths": [
+            ".github/workflows/publish.yml",
+            ".github/workflows/test-suite.yml"
+          ]
+        },
+        "summary": "2 paths over 90d; top: .github/workflows/publish.yml=0, .github/workflows/test-suite.yml=0",
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "latency_ms": 1024,
+        "error": null
+      },
+      {
+        "kind": "llm",
+        "name": "turn 3",
+        "args": {},
+        "summary": "1 tool call(s): author_history",
+        "input_tokens": 1002,
+        "output_tokens": 58,
+        "latency_ms": 4472,
+        "error": null
+      },
+      {
+        "kind": "tool",
+        "name": "author_history",
+        "args": {
+          "author": "dependabot[bot]"
+        },
+        "summary": "dependabot[bot]: 147 merged, 0 reverted",
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "latency_ms": 2165,
+        "error": null
+      },
+      {
+        "kind": "llm",
+        "name": "turn 4",
+        "args": {},
+        "summary": "1 tool call(s): ci_status",
+        "input_tokens": 1470,
+        "output_tokens": 81,
+        "latency_ms": 9059,
+        "error": null
+      },
+      {
+        "kind": "tool",
+        "name": "ci_status",
+        "args": {},
+        "summary": "passing: 5 check runs",
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "latency_ms": 743,
+        "error": null
+      },
+      {
+        "kind": "llm",
+        "name": "turn 5",
+        "args": {},
+        "summary": "done gathering",
+        "input_tokens": 1544,
+        "output_tokens": 477,
+        "latency_ms": 11205,
+        "error": null
+      },
+      {
+        "kind": "llm",
+        "name": "assessment",
+        "args": {},
+        "summary": "1 factor(s), confidence 0.95",
+        "input_tokens": 2000,
+        "output_tokens": 376,
+        "latency_ms": 13482,
+        "error": null
+      }
+    ],
+    "input_tokens": 7381,
+    "output_tokens": 1122,
+    "tool_calls": 4,
+    "cost_usd": 0.00178
+  }
+}

@@ -4,6 +4,13 @@ version = "0.1.0"
 description = "Kafka consumer that processes pr-events for Shipwatch"
 requires-python = ">=3.12"
 dependencies = [
+    "httpx>=0.27",
+    "langchain-anthropic>=1.7",
+    "langchain-core>=1.7",
+    "langchain-groq>=1.1",
+    "langchain-openai>=1.7",
+    "pymongo>=4.13",
+    "pyyaml>=6.0",
     "shipwatch-common",
 ]
 
@@ -18,4 +25,4 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/worker"]
+packages = ["src/worker", "src/agent"]

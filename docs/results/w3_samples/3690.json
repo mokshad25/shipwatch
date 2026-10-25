@@ -1,0 +1,170 @@
+{
+  "pr": {
+    "merged_at": "2025-10-13T14:00:49Z",
+    "number": 3690,
+    "title": "Add `.wait_ready` to parser for clean server disconnects"
+  },
+  "verdict": {
+    "repo": "encode/httpx",
+    "pr_number": 3690,
+    "head_sha": "350221558d4f079fc4ab3673d81a4bc730fbb9c3",
+    "level": "medium",
+    "score": 32,
+    "reason": null,
+    "assessment": {
+      "factors": [
+        {
+          "kind": "large_diff",
+          "severity": 1,
+          "evidence": "get_diff output shows changed_files:4, additions:51, deletions:6"
+        },
+        {
+          "kind": "missing_tests",
+          "severity": 2,
+          "evidence": "get_diff files list includes only src/ahttpx/_parsers.py, src/ahttpx/_server.py, src/httpx/_parsers.py, src/httpx/_server.py; no test files were modified"
+        },
+        {
+          "kind": "risky_paths",
+          "severity": 2,
+          "evidence": "diff adds wait_ready checks into the request handling loops of src/ahttpx/_server.py and src/httpx/_server.py, altering core server disconnect logic"
+        }
+      ],
+      "summary": "The PR touches a modest number of core parser and server files, adding a new wait_ready helper and early‑exit logic. While the changes are small, they modify request‑handling paths without accompanying tests, giving a modest risk that should be verified in staging.",
+      "confidence": 0.95
+    },
+    "breakdown": {
+      "large_diff": 6,
+      "missing_tests": 10,
+      "risky_paths": 16,
+      "size_lines": 0,
+      "size_files": 0
+    },
+    "rules": []
+  },
+  "trace": {
+    "repo": "encode/httpx",
+    "pr_number": 3690,
+    "provider": "groq",
+    "model": "openai/gpt-oss-120b",
+    "input_cost_per_mtok": 0.15,
+    "output_cost_per_mtok": 0.6,
+    "started_at": "2026-10-23T15:23:04.380473Z",
+    "latency_ms": 84945,
+    "steps": [
+      {
+        "kind": "llm",
+        "name": "turn 1",
+        "args": {},
+        "summary": "1 tool call(s): get_diff",
+        "input_tokens": 501,
+        "output_tokens": 28,
+        "latency_ms": 2488,
+        "error": null
+      },
+      {
+        "kind": "tool",
+        "name": "get_diff",
+        "args": {},
+        "summary": "4 files +51/-6, not truncated",
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "latency_ms": 4,
+        "error": null
+      },
+      {
+        "kind": "llm",
+        "name": "turn 2",
+        "args": {},
+        "summary": "1 tool call(s): file_churn",
+        "input_tokens": 2030,
+        "output_tokens": 115,
+        "latency_ms": 11879,
+        "error": null
+      },
+      {
+        "kind": "tool",
+        "name": "file_churn",
+        "args": {
+          "days": 90,
+          "paths": [
+            "src/ahttpx/_parsers.py",
+            "src/ahttpx/_server.py",
+            "src/httpx/_parsers.py",
+            "src/httpx/_server.py"
+          ]
+        },
+        "summary": "4 paths over 90d; top: src/ahttpx/_parsers.py=2, src/ahttpx/_server.py=2, src/httpx/_parsers.py=2",
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "latency_ms": 1973,
+        "error": null
+      },
+      {
+        "kind": "llm",
+        "name": "turn 3",
+        "args": {},
+        "summary": "1 tool call(s): author_history",
+        "input_tokens": 2223,
+        "output_tokens": 64,
+        "latency_ms": 13717,
+        "error": null
+      },
+      {
+        "kind": "tool",
+        "name": "author_history",
+        "args": {
+          "author": "lovelydinosaur"
+        },
+        "summary": "lovelydinosaur: 489 merged, 1 reverted",
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "latency_ms": 1804,
+        "error": null
+      },
+      {
+        "kind": "llm",
+        "name": "turn 4",
+        "args": {},
+        "summary": "1 tool call(s): ci_status",
+        "input_tokens": 2611,
+        "output_tokens": 131,
+        "latency_ms": 15790,
+        "error": null
+      },
+      {
+        "kind": "tool",
+        "name": "ci_status",
+        "args": {},
+        "summary": "passing: 5 check runs",
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "latency_ms": 704,
+        "error": null
+      },
+      {
+        "kind": "llm",
+        "name": "turn 5",
+        "args": {},
+        "summary": "done gathering",
+        "input_tokens": 2687,
+        "output_tokens": 543,
+        "latency_ms": 22303,
+        "error": null
+      },
+      {
+        "kind": "llm",
+        "name": "assessment",
+        "args": {},
+        "summary": "3 factor(s), confidence 0.95",
+        "input_tokens": 3155,
+        "output_tokens": 679,
+        "latency_ms": 14269,
+        "error": null
+      }
+    ],
+    "input_tokens": 13207,
+    "output_tokens": 1560,
+    "tool_calls": 4,
+    "cost_usd": 0.002917
+  }
+}

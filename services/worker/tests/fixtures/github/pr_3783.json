@@ -1,0 +1,17 @@
+{
+  "number": 3783,
+  "title": "Add option to keep the same method for 301/302 redirects",
+  "created_at": "2026-02-26T14:35:03Z",
+  "changed_files": 2,
+  "additions": 61,
+  "deletions": 0,
+  "user": {
+    "login": "kajinamit"
+  },
+  "head": {
+    "sha": "c1e73124c5d24aa6d61f0413d217f5810f62eb00"
+  },
+  "base": {
+    "ref": "master"
+  }
+}

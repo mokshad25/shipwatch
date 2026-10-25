@@ -6,18 +6,21 @@ from shipwatch_common.logging import configure_logging
 
 from worker.consumer import Worker
 from worker.settings import get_settings
+from worker.verdicts import PrVerdicts
 
 
 async def run() -> None:
     settings = get_settings()
     engine = make_engine(settings.database_url)
-    worker = Worker(settings, make_sessionmaker(engine))
+    pipeline = PrVerdicts.from_settings(settings)
+    worker = Worker(settings, make_sessionmaker(engine), process_fn=pipeline.process)
     loop = asyncio.get_running_loop()
     for sig in (signal.SIGTERM, signal.SIGINT):
         loop.add_signal_handler(sig, worker.stop)
     try:
         await worker.run()
     finally:
+        await pipeline.aclose()
         await engine.dispose()
 
 

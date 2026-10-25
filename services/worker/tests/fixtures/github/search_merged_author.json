@@ -1,0 +1,13 @@
+{
+  "total_count": 1,
+  "items": [
+    {
+      "number": 3174,
+      "title": "Removed leading $ from cli code blocks",
+      "body": "<!-- Thanks for contributing to HTTPX! \ud83d\udc9a\r\nGiven this is a project maintained by volunteers, please read this template to not waste your time, or ours! \ud83d\ude01 -->\r\n\r\n# Summary\r\n\r\nThis fix would reduce typing when copying cli codes from the docs. Now you can just click the copy button then without any modi",
+      "pull_request": {
+        "merged_at": "2024-05-05T16:24:16Z"
+      }
+    }
+  ]
+}

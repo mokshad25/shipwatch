@@ -15,10 +15,10 @@ logs: ## Follow ingester and worker logs
 db: ## Start only Postgres and wait until it accepts connections
 	docker compose up -d --wait postgres
 
-deps: ## Start what the tests need (Postgres, Redpanda, Redis) and wait until healthy
-	docker compose up -d --wait postgres redpanda redis
+deps: ## Start what the tests need (Postgres, Redpanda, Redis, Mongo) and wait until healthy
+	docker compose up -d --wait postgres redpanda redis mongo
 
-test: deps ## Run the test suite against the compose Postgres and Redpanda
+test: deps ## Run the test suite against the compose Postgres, Redpanda, Redis and Mongo
 	uv run pytest
 
 lint: ## Lint and check formatting

@@ -1,0 +1,50 @@
+# Deterministic risk score (docs/SPEC_W3.md, D4). Tune these in week 5; the code never changes.
+#
+# score = sum over factor kinds of weight * severity_multiplier[highest severity of that kind]
+#       + size points from the raw diff stats (not from the LLM)
+# clamped to 0..100, then raised by any hard rule that fires, then mapped to a level.
+
+severity_multiplier:
+  1: 1.0
+  2: 2.0
+  3: 3.0
+
+# Points per severity unit.
+factor_weights:
+  large_diff: 6
+  hot_files: 5
+  risky_paths: 8
+  new_author: 4
+  failing_ci: 10
+  missing_tests: 5
+  migration: 9
+  config_change: 6
+
+# Points for size, straight from get_diff's totals. Highest matching step wins.
+size:
+  lines:  # additions + deletions
+    - {at_least: 200, points: 5}
+    - {at_least: 500, points: 10}
+    - {at_least: 1000, points: 20}
+  files:  # changed_files
+    - {at_least: 20, points: 5}
+    - {at_least: 50, points: 10}
+
+# Lowest score for each level.
+levels:
+  medium: 25
+  high: 55
+
+# A rule fires when every listed kind is present at min_severity or more and the diff has at
+# least min_lines changed lines. It raises the score to the floor of min_level.
+rules:
+  - name: migration_with_failing_ci
+    kinds: [migration, failing_ci]
+    min_level: high
+  - name: serious_failing_ci
+    kinds: [failing_ci]
+    min_severity: 3
+    min_level: medium
+  - name: huge_diff
+    min_lines: 1000
+    min_level: medium

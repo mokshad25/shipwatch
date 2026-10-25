@@ -1,6 +1,7 @@
 """The consume loop: poll, process, commit the offset only after success (docs/SPEC_W2.md)."""
 
 import asyncio
+import dataclasses
 import json
 import random
 import uuid
@@ -120,7 +121,12 @@ class Worker:
         while True:
             attempt += 1
             try:
-                await self.attempt(msg, source)
+                await self.attempt(
+                    msg,
+                    dataclasses.replace(
+                        source, attempt=attempt, max_attempts=self.settings.max_attempts
+                    ),
+                )
                 return
             except Exception as exc:
                 now = datetime.now(UTC)
@@ -146,6 +152,11 @@ class Worker:
                 delay = backoff_delay(
                     attempt, self.settings.backoff_base, self.settings.backoff_max, self.rng
                 )
+                # A rate-limited dependency that says how long to wait gets at least that long
+                # (capped), or the remaining attempts would be spent inside the same window.
+                retry_after = getattr(exc, "retry_after", None)
+                if retry_after:
+                    delay = max(delay, min(retry_after, self.settings.retry_after_max))
                 await asyncio.sleep(delay)
 
     async def attempt(self, msg: Message, source: Source) -> None:

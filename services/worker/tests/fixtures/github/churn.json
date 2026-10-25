@@ -1,0 +1,73 @@
+{
+  "now": "2024-05-05T00:00:00Z",
+  "days": 90,
+  "commits": {
+    "README.md": [
+      {
+        "sha": "4fb9528c2f5ac000441c3634d297e77da23067cd"
+      },
+      {
+        "sha": "47f4a96ffaaaa07dca1614409549b5d7a6e7af49"
+      },
+      {
+        "sha": "f06171fd5a86cf89387f4ee860ea0da207160418"
+      },
+      {
+        "sha": "fa6dac8383541669f42086d4f07c71b0f8d6a279"
+      },
+      {
+        "sha": "be56b747350008b7b0456242691919f9086c0f32"
+      },
+      {
+        "sha": "392dbe45f086d0877bd288c5d68abf860653b680"
+      }
+    ],
+    "docs/advanced/proxies.md": [
+      {
+        "sha": "f06171fd5a86cf89387f4ee860ea0da207160418"
+      },
+      {
+        "sha": "fa6dac8383541669f42086d4f07c71b0f8d6a279"
+      }
+    ],
+    "docs/contributing.md": [
+      {
+        "sha": "1805ee0d22f96e2b29f0500dd3076e10020004bf"
+      },
+      {
+        "sha": "f06171fd5a86cf89387f4ee860ea0da207160418"
+      },
+      {
+        "sha": "fa6dac8383541669f42086d4f07c71b0f8d6a279"
+      },
+      {
+        "sha": "4941b40cbbae1ceb2b7a3d4e8064df96806c5e33"
+      }
+    ],
+    "docs/http2.md": [
+      {
+        "sha": "f06171fd5a86cf89387f4ee860ea0da207160418"
+      },
+      {
+        "sha": "fa6dac8383541669f42086d4f07c71b0f8d6a279"
+      }
+    ],
+    "docs/index.md": [
+      {
+        "sha": "4fb9528c2f5ac000441c3634d297e77da23067cd"
+      },
+      {
+        "sha": "f06171fd5a86cf89387f4ee860ea0da207160418"
+      },
+      {
+        "sha": "fa6dac8383541669f42086d4f07c71b0f8d6a279"
+      },
+      {
+        "sha": "be56b747350008b7b0456242691919f9086c0f32"
+      },
+      {
+        "sha": "392dbe45f086d0877bd288c5d68abf860653b680"
+      }
+    ]
+  }
+}

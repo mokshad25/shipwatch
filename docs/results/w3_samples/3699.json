@@ -1,0 +1,169 @@
+{
+  "pr": {
+    "merged_at": "2025-12-10T14:58:48Z",
+    "number": 3699,
+    "title": "Expose `FunctionAuth` in `__all__`"
+  },
+  "verdict": {
+    "repo": "encode/httpx",
+    "pr_number": 3699,
+    "head_sha": "4b9f63e507c4ea75fa59f6bbdfb103e2f014a6f9",
+    "level": "medium",
+    "score": 30,
+    "reason": null,
+    "assessment": {
+      "factors": [
+        {
+          "kind": "risky_paths",
+          "severity": 2,
+          "evidence": "get_diff output shows \"FunctionAuth\" added to __all__ in httpx/__init__.py and httpx/_auth.py (\"+    \\\"FunctionAuth\\\",\" and \"+__all__ = [\\\"Auth\\\", \\\"BasicAuth\\\", \\\"DigestAuth\\\", \\\"FunctionAuth\\\", \\\"NetRCAuth\\\"]\")"
+        },
+        {
+          "kind": "missing_tests",
+          "severity": 2,
+          "evidence": "get_diff reports changed_files:3 with filenames [\"CHANGELOG.md\", \"httpx/__init__.py\", \"httpx/_auth.py\"] – no test files were modified or added."
+        },
+        {
+          "kind": "new_author",
+          "severity": 1,
+          "evidence": "author_history shows merged_count:1 for author thejcannon (\"merged_count\":1)."
+        }
+      ],
+      "summary": "The PR adds a new public symbol without accompanying implementation or tests, which could cause import errors for star‑imports. The author has limited prior contributions, but CI passes and the change is small.",
+      "confidence": 0.9
+    },
+    "breakdown": {
+      "missing_tests": 10,
+      "new_author": 4,
+      "risky_paths": 16,
+      "size_lines": 0,
+      "size_files": 0
+    },
+    "rules": []
+  },
+  "trace": {
+    "repo": "encode/httpx",
+    "pr_number": 3699,
+    "provider": "groq",
+    "model": "openai/gpt-oss-120b",
+    "input_cost_per_mtok": 0.15,
+    "output_cost_per_mtok": 0.6,
+    "started_at": "2026-10-23T15:20:42.009105Z",
+    "latency_ms": 59687,
+    "steps": [
+      {
+        "kind": "llm",
+        "name": "turn 1",
+        "args": {},
+        "summary": "1 tool call(s): get_diff",
+        "input_tokens": 501,
+        "output_tokens": 28,
+        "latency_ms": 6566,
+        "error": null
+      },
+      {
+        "kind": "tool",
+        "name": "get_diff",
+        "args": {},
+        "summary": "3 files +6/-1, not truncated",
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "latency_ms": 7,
+        "error": null
+      },
+      {
+        "kind": "llm",
+        "name": "turn 2",
+        "args": {},
+        "summary": "1 tool call(s): file_churn",
+        "input_tokens": 983,
+        "output_tokens": 70,
+        "latency_ms": 7843,
+        "error": null
+      },
+      {
+        "kind": "tool",
+        "name": "file_churn",
+        "args": {
+          "days": 90,
+          "paths": [
+            "CHANGELOG.md",
+            "httpx/__init__.py",
+            "httpx/_auth.py"
+          ]
+        },
+        "summary": "3 paths over 90d; top: CHANGELOG.md=0, httpx/__init__.py=0, httpx/_auth.py=0",
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "latency_ms": 1574,
+        "error": null
+      },
+      {
+        "kind": "llm",
+        "name": "turn 3",
+        "args": {},
+        "summary": "1 tool call(s): author_history",
+        "input_tokens": 1134,
+        "output_tokens": 88,
+        "latency_ms": 4582,
+        "error": null
+      },
+      {
+        "kind": "tool",
+        "name": "author_history",
+        "args": {
+          "author": "thejcannon"
+        },
+        "summary": "thejcannon: 1 merged, 0 reverted",
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "latency_ms": 782,
+        "error": null
+      },
+      {
+        "kind": "llm",
+        "name": "turn 4",
+        "args": {},
+        "summary": "1 tool call(s): ci_status",
+        "input_tokens": 1235,
+        "output_tokens": 86,
+        "latency_ms": 7983,
+        "error": null
+      },
+      {
+        "kind": "tool",
+        "name": "ci_status",
+        "args": {},
+        "summary": "passing: 5 check runs",
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "latency_ms": 684,
+        "error": null
+      },
+      {
+        "kind": "llm",
+        "name": "turn 5",
+        "args": {},
+        "summary": "done gathering",
+        "input_tokens": 1315,
+        "output_tokens": 1110,
+        "latency_ms": 10514,
+        "error": null
+      },
+      {
+        "kind": "llm",
+        "name": "assessment",
+        "args": {},
+        "summary": "3 factor(s), confidence 0.9",
+        "input_tokens": 2057,
+        "output_tokens": 788,
+        "latency_ms": 19137,
+        "error": null
+      }
+    ],
+    "input_tokens": 7225,
+    "output_tokens": 2170,
+    "tool_calls": 4,
+    "cost_usd": 0.002386
+  }
+}

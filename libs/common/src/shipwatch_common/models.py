@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime
+from decimal import Decimal
 from typing import Any
 
 from sqlalchemy import (
@@ -16,7 +17,7 @@ from sqlalchemy import (
     func,
     text,
 )
-from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy.dialects.postgresql import JSONB, NUMERIC, UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 # Deterministic constraint names so Alembic migrations can refer to them.
@@ -109,3 +110,25 @@ class ProcessedEvent(Base):
     processed_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
+
+
+class VerdictRecord(Base):
+    """The PR risk agent's verdict, one per (pr_id, head_sha) (docs/SPEC_W3.md, D7).
+
+    The full tool-call trace lives in MongoDB under `trace_id`.
+    """
+
+    __tablename__ = "verdicts"
+    __table_args__ = (UniqueConstraint("pr_id", "head_sha"),)
+
+    id: Mapped[int] = mapped_column(BigInteger, Identity(), primary_key=True)
+    pr_id: Mapped[int] = mapped_column(BigInteger, ForeignKey("pull_requests.id"))
+    head_sha: Mapped[str] = mapped_column(String(40))
+    level: Mapped[str] = mapped_column(String(16))  # low | medium | high | needs_review
+    score: Mapped[int | None] = mapped_column(Integer)  # NULL when level is needs_review
+    reason: Mapped[str | None] = mapped_column(Text)
+    assessment: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
+    tokens: Mapped[int] = mapped_column(Integer, server_default="0")
+    cost_usd: Mapped[Decimal] = mapped_column(NUMERIC(10, 6), server_default="0")
+    trace_id: Mapped[str] = mapped_column(String(64))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

@@ -1,9 +1,20 @@
 import asyncio
+import json
 import uuid
 from collections.abc import Awaitable, Callable
+from pathlib import Path
+from typing import Any
 
 import pytest
 import redis
+import respx
+from agent.github import GitHubClient
+from langchain_core.language_models import BaseChatModel
+from langchain_core.messages import AIMessage, BaseMessage
+from langchain_core.outputs import ChatGeneration, ChatResult
+from langchain_core.runnables import RunnableLambda
+from pydantic import Field, SecretStr
+from redis.asyncio import Redis
 from shipwatch_common.db import make_sessionmaker
 from shipwatch_common.kafka import EventEnvelope, Producer
 from shipwatch_common.models import Base, ProcessedEvent
@@ -120,3 +131,137 @@ def run_worker(settings, db):
         if not task.done():
             # Reaped by the event loop; errors surface in the test that awaited it.
             task.cancel()
+
+
+GITHUB_FIXTURES = Path(__file__).parent / "fixtures" / "github"
+
+
+def _load_github(name: str) -> Any:
+    return json.loads((GITHUB_FIXTURES / name).read_text())
+
+
+@pytest.fixture
+def load_github() -> Callable[[str], Any]:
+    """`load_github("pr_3174.json")`: a recorded (trimmed) GitHub response body."""
+    return _load_github
+
+
+@pytest.fixture
+def gh_api():
+    """respx router for api.github.com. Any request without a matching route fails the test."""
+    with respx.mock(base_url="https://api.github.com", assert_all_called=False) as router:
+        yield router
+
+
+@pytest.fixture
+async def github(gh_api) -> GitHubClient:
+    """GitHubClient on the compose Redis with a throwaway key prefix; HTTP goes to `gh_api`."""
+    settings = WorkerSettings(
+        _env_file=None,
+        github_token=SecretStr("test-token"),
+        redis_key_prefix=f"test-{uuid.uuid4().hex[:8]}:",
+    )
+    client = Redis.from_url(settings.redis_url)
+    gh = GitHubClient.from_settings(settings, client)
+    yield gh
+    await gh.aclose()
+    keys = [key async for key in client.scan_iter(f"{settings.redis_key_prefix}*")]
+    if keys:
+        await client.delete(*keys)
+    await client.aclose()
+
+
+class FakeChatModel(BaseChatModel):
+    """Scripted chat model: each call (tool turn or structured output) takes the next item.
+
+    Items are AIMessages, exceptions to raise, or async callables (e.g. to sleep) returning one.
+    Structured output parses the message's content as JSON, like the real json_schema mode.
+    """
+
+    script: list[Any] = Field(default_factory=list)
+    calls: list[list[BaseMessage]] = Field(default_factory=list)
+    bound_tools: list[Any] = Field(default_factory=list)
+
+    @property
+    def _llm_type(self) -> str:
+        return "fake"
+
+    def _generate(self, messages, stop=None, run_manager=None, **kwargs) -> ChatResult:
+        raise NotImplementedError("the agent is async")
+
+    async def _next(self, messages: list[BaseMessage]) -> AIMessage:
+        self.calls.append(list(messages))
+        if not self.script:
+            raise AssertionError("FakeChatModel script exhausted")
+        item = self.script.pop(0)
+        if isinstance(item, BaseException):
+            raise item
+        if callable(item):
+            item = await item()
+        return item
+
+    async def _agenerate(self, messages, stop=None, run_manager=None, **kwargs) -> ChatResult:
+        return ChatResult(generations=[ChatGeneration(message=await self._next(messages))])
+
+    def bind_tools(self, tools, **kwargs):
+        self.bound_tools = list(tools)
+        return self
+
+    def with_structured_output(self, schema, *, include_raw=False, **kwargs):
+        async def run(value):
+            raw = await self._next(value if isinstance(value, list) else value.to_messages())
+            try:
+                parsed, error = schema.model_validate_json(raw.content), None
+            except ValueError as exc:  # pydantic's ValidationError is a ValueError
+                parsed, error = None, exc
+            if not include_raw:
+                if error:
+                    raise error
+                return parsed
+            return {"raw": raw, "parsed": parsed, "parsing_error": error}
+
+        return RunnableLambda(run)
+
+
+def _usage(input_tokens: int = 100, output_tokens: int = 20) -> dict[str, int]:
+    return {
+        "input_tokens": input_tokens,
+        "output_tokens": output_tokens,
+        "total_tokens": input_tokens + output_tokens,
+    }
+
+
+def ai_tools(*calls: tuple[str, dict[str, Any]], **usage: int) -> AIMessage:
+    """An AIMessage asking for tool calls: `ai_tools(("get_diff", {}), ("ci_status", {}))`."""
+    return AIMessage(
+        content="",
+        tool_calls=[
+            {"name": name, "args": args, "id": f"call_{uuid.uuid4().hex[:8]}"}
+            for name, args in calls
+        ],
+        usage_metadata=_usage(**usage),
+    )
+
+
+def ai_text(text: str, **usage: int) -> AIMessage:
+    """A plain reply (no tool calls), or the JSON body of a structured-output reply."""
+    if not isinstance(text, str):
+        text = json.dumps(text)
+    return AIMessage(content=text, usage_metadata=_usage(**usage))
+
+
+@pytest.fixture
+def fake_llm() -> Callable[..., FakeChatModel]:
+    """`fake_llm(item, item, ...)`: a FakeChatModel that answers with the given script."""
+    return lambda *script: FakeChatModel(script=list(script))
+
+
+@pytest.fixture
+def llm_reply():
+    """Builders for scripted replies: `llm_reply.tools(...)`, `llm_reply.text(...)`."""
+
+    class Replies:
+        tools = staticmethod(ai_tools)
+        text = staticmethod(ai_text)
+
+    return Replies

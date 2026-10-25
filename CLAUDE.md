@@ -69,11 +69,10 @@ make fmt                 # ruff format + ruff check --fix
 make down                # stop everything
 ```
 
-Tests never use SQLite; they run against the compose Postgres (CI uses a `postgres:16` service container).
+Tests never use SQLite; they run against the compose Postgres (CI starts the same compose Postgres, Redpanda and Redis).
 
 ## Rules for every session
 
-- Do only the step asked. Don't build ahead.
 - Every change ships with a test, and `make test` must pass before stopping.
 - Never commit secrets. Keep a `.env.example` up to date instead.
 - End each session with: what changed, how to run it, and what's next.

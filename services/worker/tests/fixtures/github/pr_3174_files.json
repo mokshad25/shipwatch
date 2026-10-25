@@ -1,0 +1,37 @@
+[
+  {
+    "filename": "README.md",
+    "status": "modified",
+    "additions": 4,
+    "deletions": 4,
+    "patch": "@@ -22,7 +22,7 @@ and async APIs**.\n Install HTTPX using pip:\n \n ```shell\n-$ pip install httpx\n+pip install httpx\n ```\n \n Now, let's get started:\n@@ -43,7 +43,7 @@ Now, let's get started:\n Or, using the command-line client.\n \n ```shell\n-$ pip install 'httpx[cli]'  # The command line client is an optional dependency.\n+pip install 'httpx[cli]'  # The command line client is an optional dependency.\n ```\n \n Which now allows us to use HTTPX directly from the command-line...\n@@ -94,13 +94,13 @@ Plus all the standard features of `requests`...\n Install with pip:\n \n ```shell\n-$ pip install httpx\n+pip install httpx\n ```\n \n Or, to include the optional HTTP/2 support, use:\n \n ```shell\n-$ pip install httpx[http2]\n+pip install httpx[http2]\n ```\n \n HTTPX requires Python 3.8+."
+  },
+  {
+    "filename": "docs/advanced/proxies.md",
+    "status": "modified",
+    "additions": 1,
+    "deletions": 1,
+    "patch": "@@ -73,7 +73,7 @@ This is an optional feature that requires an additional third-party library be i\n You can install SOCKS support using `pip`:\n \n ```shell\n-$ pip install httpx[socks]\n+pip install httpx[socks]\n ```\n \n You can now configure a client to make requests via a proxy using the SOCKS protocol:"
+  },
+  {
+    "filename": "docs/contributing.md",
+    "status": "modified",
+    "additions": 9,
+    "deletions": 9,
+    "patch": "@@ -46,14 +46,14 @@ Then clone your fork with the following command replacing `YOUR-USERNAME` with\n your GitHub username:\n \n ```shell\n-$ git clone https://github.com/YOUR-USERNAME/httpx\n+git clone https://github.com/YOUR-USERNAME/httpx\n ```\n \n You can now install the project and its dependencies using:\n \n ```shell\n-$ cd httpx\n-$ scripts/install\n+cd httpx\n+scripts/install\n ```\n \n ## Testing and Linting\n@@ -64,7 +64,7 @@ and documentation building workflow.\n To run the tests, use:\n \n ```shell\n-$ scripts/test\n+scripts/test\n ```\n \n !!! warning\n@@ -76,19 +76,19 @@ Any additional arguments will be passed to `pytest`. See the [pytest documentati\n For example, to run a single test script:\n \n ```shell\n-$ scripts/test tests/test_multipart.py\n+scripts/test tests/test_multipart.py\n ```\n \n To run the code auto-formatting:\n \n ```shell\n-$ scripts/lint\n+scripts/lint\n ```\n \n Lastly, to run code checks separately (they are also run as part of `scripts/test`), run:\n \n ```shell\n-$ scripts/check\n+scripts/check\n ```\n \n ## Documenting\n@@ -98,7 +98,7 @@ Documentation pages are located under the `docs/` folder.\n To run the documentation site locally (useful for previewing changes), use:\n \n ```shell\n-$ scripts/docs\n+scripts/docs\n ```\n \n ## Resolving Build / CI Failures\n@@ -122,7 +122,7 @@ This job failing means there is either a code formatting issue or type-annotatio\n You can look at the job output to figure out why it's failed or within a shell run:\n \n ```shell\n-$ scripts/check\n+scripts/check\n ```\n \n It may be worth it to run `$ scripts/lint` to attempt auto-formatting the code"
+  },
+  {
+    "filename": "docs/http2.md",
+    "status": "modified",
+    "additions": 1,
+    "deletions": 1,
+    "patch": "@@ -28,7 +28,7 @@ trying out our HTTP/2 support. You can do so by first making sure to install\n the optional HTTP/2 dependencies...\n \n ```shell\n-$ pip install httpx[http2]\n+pip install httpx[http2]\n ```\n \n And then instantiating a client with HTTP/2 support enabled:"
+  },
+  {
+    "filename": "docs/index.md",
+    "status": "modified",
+    "additions": 5,
+    "deletions": 5,
+    "patch": "@@ -28,7 +28,7 @@ HTTPX is a fully featured HTTP client for Python 3, which provides sync and asyn\n Install HTTPX using pip:\n \n ```shell\n-$ pip install httpx\n+pip install httpx\n ```\n \n Now, let's get started:\n@@ -50,7 +50,7 @@ Or, using the command-line client.\n \n ```shell\n # The command line client is an optional dependency.\n-$ pip install 'httpx[cli]'\n+pip install 'httpx[cli]'\n ```\n \n Which now allows us to use HTTPX directly from the command-line...\n@@ -130,19 +130,19 @@ inspiration around the lower-level networking details.\n Install with pip:\n \n ```shell\n-$ pip install httpx\n+pip install httpx\n ```\n \n Or, to include the optional HTTP/2 support, use:\n \n ```shell\n-$ pip install httpx[http2]\n+pip install httpx[http2]\n ```\n \n To include the optional brotli and zstandard decoders support, use:\n \n ```shell\n-$ pip install httpx[brotli,zstd]\n+pip install httpx[brotli,zstd]\n ```\n \n HTTPX requires Python 3.8+"
+  }
+]

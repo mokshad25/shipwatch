@@ -1,0 +1,148 @@
+{
+  "pr": {
+    "merged_at": "2025-12-10T14:47:31Z",
+    "number": 3703,
+    "title": "docs/ssl: fix typo"
+  },
+  "verdict": {
+    "repo": "encode/httpx",
+    "pr_number": 3703,
+    "head_sha": "ae1ddc99af52472c08803fb9d4d3f8ce20a0e2e0",
+    "level": "low",
+    "score": 0,
+    "reason": null,
+    "assessment": {
+      "factors": [],
+      "summary": "The PR only fixes a typo in a documentation file, changing one line and affecting a single non-code file. All CI checks pass and the author has a history of safe documentation changes, making the change low risk.",
+      "confidence": 1.0
+    },
+    "breakdown": {
+      "size_lines": 0,
+      "size_files": 0
+    },
+    "rules": []
+  },
+  "trace": {
+    "repo": "encode/httpx",
+    "pr_number": 3703,
+    "provider": "groq",
+    "model": "openai/gpt-oss-120b",
+    "input_cost_per_mtok": 0.15,
+    "output_cost_per_mtok": 0.6,
+    "started_at": "2026-10-23T15:21:42.946003Z",
+    "latency_ms": 43772,
+    "steps": [
+      {
+        "kind": "llm",
+        "name": "turn 1",
+        "args": {},
+        "summary": "1 tool call(s): get_diff",
+        "input_tokens": 501,
+        "output_tokens": 28,
+        "latency_ms": 9801,
+        "error": null
+      },
+      {
+        "kind": "tool",
+        "name": "get_diff",
+        "args": {},
+        "summary": "1 files +1/-1, not truncated",
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "latency_ms": 4,
+        "error": null
+      },
+      {
+        "kind": "llm",
+        "name": "turn 2",
+        "args": {},
+        "summary": "1 tool call(s): file_churn",
+        "input_tokens": 746,
+        "output_tokens": 62,
+        "latency_ms": 2577,
+        "error": null
+      },
+      {
+        "kind": "tool",
+        "name": "file_churn",
+        "args": {
+          "days": 90,
+          "paths": [
+            "docs/advanced/ssl.md"
+          ]
+        },
+        "summary": "1 paths over 90d; top: docs/advanced/ssl.md=1",
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "latency_ms": 496,
+        "error": null
+      },
+      {
+        "kind": "llm",
+        "name": "turn 3",
+        "args": {},
+        "summary": "1 tool call(s): author_history",
+        "input_tokens": 855,
+        "output_tokens": 54,
+        "latency_ms": 5543,
+        "error": null
+      },
+      {
+        "kind": "tool",
+        "name": "author_history",
+        "args": {
+          "author": "xrmx"
+        },
+        "summary": "xrmx: 2 merged, 0 reverted",
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "latency_ms": 827,
+        "error": null
+      },
+      {
+        "kind": "llm",
+        "name": "turn 4",
+        "args": {},
+        "summary": "1 tool call(s): ci_status",
+        "input_tokens": 987,
+        "output_tokens": 93,
+        "latency_ms": 5839,
+        "error": null
+      },
+      {
+        "kind": "tool",
+        "name": "ci_status",
+        "args": {},
+        "summary": "passing: 5 check runs",
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "latency_ms": 623,
+        "error": null
+      },
+      {
+        "kind": "llm",
+        "name": "turn 5",
+        "args": {},
+        "summary": "done gathering",
+        "input_tokens": 1067,
+        "output_tokens": 307,
+        "latency_ms": 6342,
+        "error": null
+      },
+      {
+        "kind": "llm",
+        "name": "assessment",
+        "args": {},
+        "summary": "0 factor(s), confidence 1.0",
+        "input_tokens": 1447,
+        "output_tokens": 376,
+        "latency_ms": 11707,
+        "error": null
+      }
+    ],
+    "input_tokens": 5603,
+    "output_tokens": 920,
+    "tool_calls": 4,
+    "cost_usd": 0.001392
+  }
+}

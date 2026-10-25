@@ -10,17 +10,6 @@ jobs:
   lint-test:
     runs-on: ubuntu-latest
     env:
-          POSTGRES_USER: shipwatch
-          POSTGRES_PASSWORD: shipwatch
-          POSTGRES_DB: shipwatch
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U shipwatch -d shipwatch"
-          --health-interval 2s
-          --health-timeout 3s
-          --health-retries 30
-    env:
       DATABASE_URL: postgresql+asyncpg://shipwatch:shipwatch@localhost:5432/shipwatch
     steps:
       - uses: actions/checkout@v4
@@ -28,11 +17,11 @@ jobs:
         with:
           enable-cache: true
       - run: uv sync --frozen
-      # Same containers as `make deps` locally, so CI tests against real Postgres, Redpanda and Redis.
+      # Same containers as `make deps` locally, so CI tests against real Postgres, Redpanda, Redis, Mongo.
       - name: start dependencies
         run: |
           cp .env.example .env
-          docker compose up -d --wait postgres redpanda redis
+          docker compose up -d --wait postgres redpanda redis mongo
       - name: ruff
         run: |
           uv run ruff check .

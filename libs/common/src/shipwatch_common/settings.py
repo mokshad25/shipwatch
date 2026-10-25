@@ -21,6 +21,7 @@ class ServiceSettings(DatabaseSettings):
     # Settings rather than constants so tests can use throwaway topics.
     pr_events_topic: str = "pr-events"
     pr_events_dlq_topic: str = "pr-events.dlq"
+    pr_verdicts_topic: str = "pr-verdicts"
     redis_url: str = "redis://localhost:6379/0"
     redis_key_prefix: str = "shipwatch:"
 

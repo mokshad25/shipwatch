@@ -1,0 +1,30 @@
+{
+  "total_count": 5,
+  "check_runs": [
+    {
+      "name": "Python 3.13",
+      "status": "completed",
+      "conclusion": "failure"
+    },
+    {
+      "name": "Python 3.11",
+      "status": "completed",
+      "conclusion": "cancelled"
+    },
+    {
+      "name": "Python 3.12",
+      "status": "completed",
+      "conclusion": "cancelled"
+    },
+    {
+      "name": "Python 3.9",
+      "status": "completed",
+      "conclusion": "cancelled"
+    },
+    {
+      "name": "Python 3.10",
+      "status": "completed",
+      "conclusion": "cancelled"
+    }
+  ]
+}

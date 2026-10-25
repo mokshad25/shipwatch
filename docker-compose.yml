@@ -25,6 +25,19 @@ services:
       timeout: 3s
       retries: 30
 
+  # Agent traces (one document per verdict).
+  mongo:
+    image: mongo:7.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+
   redpanda:
     image: redpandadata/redpanda:v24.2.7
     command:
@@ -56,6 +69,7 @@ services:
         create() { rpk topic create "$$1" -p "$$2" -X brokers=redpanda:9092 2>&1 | tee /dev/stderr | grep -qE 'OK|TOPIC_ALREADY_EXISTS'; }
         create pr-events 3
         create pr-events.dlq 1
+        create pr-verdicts 3
     depends_on:
       redpanda:
         condition: service_healthy
@@ -96,10 +110,13 @@ services:
     build:
       context: .
       dockerfile: services/worker/Dockerfile
+    # API keys and LLM settings (GITHUB_TOKEN, LLM_*, OPENAI_API_KEY); `environment` below wins.
+    env_file: .env
     environment:
       DATABASE_URL: postgresql+asyncpg://shipwatch:shipwatch@postgres:5432/shipwatch
       KAFKA_BOOTSTRAP_SERVERS: redpanda:9092
       REDIS_URL: redis://redis:6379/0
+      MONGO_URL: mongodb://mongo:27017
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
       FAIL_RATE: ${FAIL_RATE:-0}
       # Static membership (see SPEC_W2). Unique per replica if the worker is ever scaled out.
@@ -114,7 +131,10 @@ services:
         condition: service_completed_successfully
       redis:
         condition: service_healthy
+      mongo:
+        condition: service_healthy
 
 volumes:
   pgdata:
   redpanda:
+  mongodata:
