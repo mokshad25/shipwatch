@@ -1,0 +1,72 @@
+name: eval
+
+# Regression gate for the PR risk agent (docs/EVALS.md, W5 D5). Runs the agent on a fixed 10-PR
+# subset with recorded GitHub responses (evals/cache/github), so only the LLM is live, and fails
+# if F1 drops more than 5 points against evals/baseline.json.
+on:
+  pull_request:
+    paths:
+      - "services/worker/src/agent/**" # prompts/, weights.yaml (scoring), the agent itself
+      - "evals/run.py"
+      - "evals/evalkit.py"
+      - "evals/baseline.json"
+      - "evals/data/**"
+      - ".github/workflows/eval.yml"
+
+permissions:
+  contents: read
+  pull-requests: write # the metrics comment
+
+concurrency:
+  group: eval-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    # Groq's free tier allows 8k tokens/min; 10 PRs at ~18k tokens each take ~25 minutes.
+    timeout-minutes: 60
+    env:
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      # Only for GitHub responses missing from the recorded cache (reported in the comment).
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - run: uv sync --frozen
+      - name: check the LLM key
+        run: |
+          if [ -z "$GROQ_API_KEY" ]; then
+            echo "::error::Add a GROQ_API_KEY repository secret (Settings > Secrets > Actions)."
+            exit 1
+          fi
+      - name: eval (10-PR subset vs baseline)
+        id: eval
+        continue-on-error: true
+        run: |
+          uv run python evals/run.py \
+            --model "$(jq -r .model evals/baseline.json)" \
+            --subset evals/data/ci_subset.txt \
+            --no-cache --concurrency 1 \
+            --baseline evals/baseline.json --max-f1-drop 5 \
+            --out eval-report --markdown-out eval-comment.md
+      - name: comment the metrics on the PR
+        if: always() && hashFiles('eval-comment.md') != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          gh pr comment "$PR" --body-file eval-comment.md --edit-last \
+            || gh pr comment "$PR" --body-file eval-comment.md
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eval-report
+          path: eval-report/
+      - name: gate
+        if: steps.eval.outcome != 'success'
+        run: |
+          echo "::error::Eval gate failed: F1 dropped more than 5 points, or the run didn't finish."
+          exit 1

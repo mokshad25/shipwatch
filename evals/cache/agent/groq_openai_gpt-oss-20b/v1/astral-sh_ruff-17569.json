@@ -1,0 +1,174 @@
+{
+ "repo": "astral-sh/ruff",
+ "number": 17569,
+ "label": 1,
+ "model": "groq:openai/gpt-oss-20b",
+ "prompt_version": "v1",
+ "stats": {
+  "additions": 136,
+  "deletions": 3,
+  "changed_files": 6
+ },
+ "verdict": {
+  "repo": "astral-sh/ruff",
+  "pr_number": 17569,
+  "head_sha": "740159275f260018e675c06b9eae39d361002f86",
+  "level": "medium",
+  "score": 52,
+  "reason": null,
+  "assessment": {
+   "factors": [
+    {
+     "kind": "hot_files",
+     "severity": 2,
+     "evidence": "\"crates/red_knot/tests/cli.rs\":{\"commits\":21,\"capped\":false},\"crates/red_knot_project/src/metadata/options.rs\":{\"commits\":21,\"capped\":false},\"knot.schema.json\":{\"commits\":15,\"capped\":false}"
+    },
+    {
+     "kind": "config_change",
+     "severity": 2,
+     "evidence": "\"changed_files\":6,\"additions\":136,\"deletions\":3,\"files\":[{\"filename\":\"crates/red_knot/src/args.rs\"}...]"
+    },
+    {
+     "kind": "failing_ci",
+     "severity": 3,
+     "evidence": "\"state\":\"none\""
+    }
+   ],
+   "summary": "The PR adds a new `--respect-ignore-files` flag, updating configuration, settings, and tests. It touches frequently modified files and currently lacks CI validation, so a full test run is recommended before merge.",
+   "confidence": 0.8
+  },
+  "breakdown": {
+   "config_change": 12,
+   "failing_ci": 30,
+   "hot_files": 10,
+   "size_lines": 0,
+   "size_files": 0
+  },
+  "rules": [
+   "serious_failing_ci"
+  ]
+ },
+ "trace": {
+  "repo": "astral-sh/ruff",
+  "pr_number": 17569,
+  "provider": "groq",
+  "model": "openai/gpt-oss-20b",
+  "prompt_version": "v1",
+  "input_cost_per_mtok": 0.075,
+  "output_cost_per_mtok": 0.3,
+  "started_at": "2026-10-26T09:03:34.205305Z",
+  "latency_ms": 57677,
+  "steps": [
+   {
+    "kind": "llm",
+    "name": "turn 1",
+    "args": {},
+    "summary": "1 tool call(s): get_diff",
+    "input_tokens": 503,
+    "output_tokens": 183,
+    "latency_ms": 421,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "get_diff",
+    "args": {
+     "author": "johndoe",
+     "files": [
+      {
+       "patch": "@@ -10,7 +10,7 @@\n-import os\n+import os\n-import sys\n+import sys\n@@ -20,6 +20,8 @@\n-def format_code(code: str) -> str:\n-    return code.strip()\n+def format_code(code: str) -> str:\n+    return code.strip()\n+    # TODO: handle formatting\n",
+       "path": "ruff/formatting.py"
+      }
+     ],
+     "head_sha": "abc123def456",
+     "title": "Add missing imports to ruff/formatting.py",
+     "total_files_changed": 1,
+     "total_lines_added": 5,
+     "total_lines_removed": 3
+    },
+    "summary": "6 files +136/-3, not truncated",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 1,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 2",
+    "args": {},
+    "summary": "1 tool call(s): file_churn",
+    "input_tokens": 2949,
+    "output_tokens": 187,
+    "latency_ms": 867,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "file_churn",
+    "args": {
+     "days": 90,
+     "paths": [
+      "crates/red_knot/src/args.rs",
+      "crates/red_knot/tests/cli.rs",
+      "crates/red_knot_project/src/metadata/options.rs",
+      "crates/red_knot_project/src/metadata/settings.rs",
+      "crates/red_knot_project/src/walk.rs",
+      "knot.schema.json"
+     ]
+    },
+    "summary": "6 paths over 90d; top: crates/red_knot/tests/cli.rs=21, crates/red_knot_project/src/metadata/options.rs=21, knot.schema.json=15",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 3,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 3",
+    "args": {},
+    "summary": "1 tool call(s): ci_status",
+    "input_tokens": 3221,
+    "output_tokens": 262,
+    "latency_ms": 749,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "ci_status",
+    "args": {
+     "head_sha": "740159275f260018e675c06b9eae39d361002f86",
+     "repo": "astral-sh/ruff"
+    },
+    "summary": "none: 0 check runs",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 1,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 4",
+    "args": {},
+    "summary": "done gathering",
+    "input_tokens": 3329,
+    "output_tokens": 745,
+    "latency_ms": 21919,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "assessment",
+    "args": {},
+    "summary": "3 factor(s), confidence 0.8",
+    "input_tokens": 3818,
+    "output_tokens": 1458,
+    "latency_ms": 33673,
+    "error": null
+   }
+  ],
+  "input_tokens": 13820,
+  "output_tokens": 2835,
+  "tool_calls": 3,
+  "cost_usd": 0.001887
+ }
+}

@@ -1,0 +1,127 @@
+{
+ "repo": "pydantic/pydantic",
+ "number": 12459,
+ "label": 1,
+ "model": "groq:openai/gpt-oss-20b",
+ "prompt_version": "v1",
+ "stats": {
+  "additions": 1,
+  "deletions": 9,
+  "changed_files": 1
+ },
+ "verdict": {
+  "repo": "pydantic/pydantic",
+  "pr_number": 12459,
+  "head_sha": "75cf93c5a07d8f6668977588d6d675583d4fd29d",
+  "level": "low",
+  "score": 22,
+  "reason": null,
+  "assessment": {
+   "factors": [
+    {
+     "kind": "hot_files",
+     "severity": 2,
+     "evidence": "{\"repo\":\"pydantic/pydantic\",\"ref\":\"main\",\"days\":90,\"since\":\"2025-07-31T16:43:46Z\",\"until\":\"2025-10-29T16:43:46Z\",\"files\":{\".github/workflows/ci.yml\":{\"commits\":9,\"capped\":false}}}"
+    },
+    {
+     "kind": "config_change",
+     "severity": 2,
+     "evidence": "@@ -394,12 +394,7 @@ jobs:\\n           import os\\n           import tweepy\\n\\n-          client = tweepy.Client(\\n-              access_token=os.getenv(\\\"TWITTER_ACCESS_TOKEN\\\"),\\n-              access_token_secret=os.getenv(\\\"TWITTER_ACCESS_TOKEN_SECRET\\\"),\\n-              consumer_key=os.getenv(\\\"TWITTER_CONSUMER_KEY\\\"),\\n-              consumer_secret=os.getenv(\\\"TWITTER_CONSUMER_SECRET\\\"),\\n-          )\\n+          client = tweepy.Client(os.getenv(\\\"TWITTER_ACCESS_TOKEN\\\"))\\n           version = os.getenv(\\\"VERSION\\\").strip('\\\"')\\n\\n           if \\\"b\\\" in version:\\n@@ -422,7 +417,4 @@ jobs:\\n             and let us know if you encounter any issues!\\n\\n             https://github.com/pydantic/pydantic/releases/tag/v{version}\\n-          TWITTER_CONSUMER_KEY: ${{ secrets.TWITTER_CONSUMER_KEY }}\\n-          TWITTER_CONSUMER_SECRET: ${{ secrets.TWITTER_CONSUMER_SECRET }}\\n           TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}\\n-          TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}"
+    }
+   ],
+   "summary": "The PR modifies the CI workflow to simplify the Tweepy client call and remove some env vars. It touches a frequently edited workflow file and changes CI configuration, but no code changes or tests are added.",
+   "confidence": 0.9
+  },
+  "breakdown": {
+   "config_change": 12,
+   "hot_files": 10,
+   "size_lines": 0,
+   "size_files": 0
+  },
+  "rules": []
+ },
+ "trace": {
+  "repo": "pydantic/pydantic",
+  "pr_number": 12459,
+  "provider": "groq",
+  "model": "openai/gpt-oss-20b",
+  "prompt_version": "v1",
+  "input_cost_per_mtok": 0.075,
+  "output_cost_per_mtok": 0.3,
+  "started_at": "2026-10-26T09:20:13.811113Z",
+  "latency_ms": 31180,
+  "steps": [
+   {
+    "kind": "llm",
+    "name": "turn 1",
+    "args": {},
+    "summary": "1 tool call(s): get_diff",
+    "input_tokens": 504,
+    "output_tokens": 47,
+    "latency_ms": 7691,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "get_diff",
+    "args": {
+     "": ""
+    },
+    "summary": "1 files +1/-9, not truncated",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 2,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 2",
+    "args": {},
+    "summary": "1 tool call(s): file_churn",
+    "input_tokens": 942,
+    "output_tokens": 131,
+    "latency_ms": 6718,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "file_churn",
+    "args": {
+     "days": 90,
+     "paths": [
+      ".github/workflows/ci.yml"
+     ]
+    },
+    "summary": "1 paths over 90d; top: .github/workflows/ci.yml=9",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 2,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 3",
+    "args": {},
+    "summary": "done gathering",
+    "input_tokens": 1057,
+    "output_tokens": 16,
+    "latency_ms": 184,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "assessment",
+    "args": {},
+    "summary": "2 factor(s), confidence 0.9",
+    "input_tokens": 1241,
+    "output_tokens": 1861,
+    "latency_ms": 16580,
+    "error": null
+   }
+  ],
+  "input_tokens": 3744,
+  "output_tokens": 2055,
+  "tool_calls": 2,
+  "cost_usd": 0.000897
+ }
+}

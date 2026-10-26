@@ -43,6 +43,7 @@ class WorkerSettings(ServiceSettings):
     agent_timeout_seconds: float = 60.0  # the whole run: every LLM and tool call
     agent_max_tool_calls: int = 6
     llm_token_budget: int = 50_000  # input + output tokens per PR
+    prompt_version: str = "v1"  # agent/prompts/<version>.md (docs/EVALS.md)
     mongo_url: str = "mongodb://localhost:27017"
     mongo_db: str = "shipwatch"
 

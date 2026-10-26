@@ -1,0 +1,163 @@
+{
+ "repo": "pydantic/pydantic",
+ "number": 12334,
+ "label": 1,
+ "model": "groq:openai/gpt-oss-20b",
+ "prompt_version": "v1",
+ "stats": {
+  "additions": 36,
+  "deletions": 0,
+  "changed_files": 4
+ },
+ "verdict": {
+  "repo": "pydantic/pydantic",
+  "pr_number": 12334,
+  "head_sha": "49b1df6ee4f2ddc7c9ccfc739b4f9c6d814d5e76",
+  "level": "low",
+  "score": 0,
+  "reason": null,
+  "assessment": {
+   "factors": [],
+   "summary": "The PR adds an optional flag to serialization functions and corresponding tests. It touches only four files, with a modest number of commits in the last 90 days. All CI checks pass and the author has a strong history. No breaking changes or new dependencies. Low risk for deployment.",
+   "confidence": 1.0
+  },
+  "breakdown": {
+   "size_lines": 0,
+   "size_files": 0
+  },
+  "rules": []
+ },
+ "trace": {
+  "repo": "pydantic/pydantic",
+  "pr_number": 12334,
+  "provider": "groq",
+  "model": "openai/gpt-oss-20b",
+  "prompt_version": "v1",
+  "input_cost_per_mtok": 0.075,
+  "output_cost_per_mtok": 0.3,
+  "started_at": "2026-10-26T09:08:41.152817Z",
+  "latency_ms": 131267,
+  "steps": [
+   {
+    "kind": "llm",
+    "name": "turn 1",
+    "args": {},
+    "summary": "1 tool call(s): get_diff",
+    "input_tokens": 504,
+    "output_tokens": 33,
+    "latency_ms": 11592,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "get_diff",
+    "args": {
+     "": " "
+    },
+    "summary": "4 files +36/-0, not truncated",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 2,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 2",
+    "args": {},
+    "summary": "1 tool call(s): file_churn",
+    "input_tokens": 2521,
+    "output_tokens": 73,
+    "latency_ms": 21580,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "file_churn",
+    "args": {
+     "days": 90,
+     "paths": [
+      "pydantic/main.py",
+      "pydantic/root_model.py",
+      "pydantic/type_adapter.py",
+      "tests/test_computed_fields.py"
+     ],
+     "repo": "pydantic/pydantic"
+    },
+    "summary": "4 paths over 90d; top: pydantic/main.py=5, pydantic/type_adapter.py=3, pydantic/root_model.py=1",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 2259,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 3",
+    "args": {},
+    "summary": "1 tool call(s): author_history",
+    "input_tokens": 2716,
+    "output_tokens": 15,
+    "latency_ms": 18989,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "author_history",
+    "args": {
+     "author": "Viicos"
+    },
+    "summary": "Viicos: 371 merged, 0 reverted",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 3070,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 4",
+    "args": {},
+    "summary": "1 tool call(s): ci_status",
+    "input_tokens": 3174,
+    "output_tokens": 62,
+    "latency_ms": 19777,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "ci_status",
+    "args": {
+     "repo": "pydantic/pydantic",
+     "sha": "49b1df6ee4f2ddc7c9ccfc739b4f9c6d814d5e76"
+    },
+    "summary": "passing: 65 check runs",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 771,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 5",
+    "args": {},
+    "summary": "done gathering",
+    "input_tokens": 3308,
+    "output_tokens": 384,
+    "latency_ms": 25270,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "assessment",
+    "args": {},
+    "summary": "0 factor(s), confidence 1.0",
+    "input_tokens": 3531,
+    "output_tokens": 641,
+    "latency_ms": 27779,
+    "error": null
+   }
+  ],
+  "input_tokens": 15754,
+  "output_tokens": 1208,
+  "tool_calls": 4,
+  "cost_usd": 0.001544
+ }
+}

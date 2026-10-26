@@ -1,0 +1,164 @@
+{
+ "repo": "pydantic/pydantic",
+ "number": 12334,
+ "label": 1,
+ "model": "groq:openai/gpt-oss-120b",
+ "prompt_version": "v1",
+ "stats": {
+  "additions": 36,
+  "deletions": 0,
+  "changed_files": 4
+ },
+ "verdict": {
+  "repo": "pydantic/pydantic",
+  "pr_number": 12334,
+  "head_sha": "49b1df6ee4f2ddc7c9ccfc739b4f9c6d814d5e76",
+  "level": "low",
+  "score": 16,
+  "reason": null,
+  "assessment": {
+   "factors": [
+    {
+     "kind": "risky_paths",
+     "severity": 2,
+     "evidence": "Added `exclude_computed_fields` flag to public serialization APIs (e.g., in pydantic/main.py the diff shows `+        exclude_computed_fields: bool = False,` and similar additions in model_dump_json, dump_python, dump_json)."
+    }
+   ],
+   "summary": "The PR introduces a new `exclude_computed_fields` option to the public model_dump and related serialization functions, a backward‑compatible API change that is covered by new tests and passes all CI checks. Overall risk is low, with only minor impact if the flag behaves unexpectedly.",
+   "confidence": 0.97
+  },
+  "breakdown": {
+   "risky_paths": 16,
+   "size_lines": 0,
+   "size_files": 0
+  },
+  "rules": []
+ },
+ "trace": {
+  "repo": "pydantic/pydantic",
+  "pr_number": 12334,
+  "provider": "groq",
+  "model": "openai/gpt-oss-120b",
+  "prompt_version": "v1",
+  "input_cost_per_mtok": 0.15,
+  "output_cost_per_mtok": 0.6,
+  "started_at": "2026-10-26T09:10:05.364610Z",
+  "latency_ms": 122194,
+  "steps": [
+   {
+    "kind": "llm",
+    "name": "turn 1",
+    "args": {},
+    "summary": "1 tool call(s): get_diff",
+    "input_tokens": 504,
+    "output_tokens": 44,
+    "latency_ms": 6941,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "get_diff",
+    "args": {},
+    "summary": "4 files +36/-0, not truncated",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 2,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 2",
+    "args": {},
+    "summary": "1 tool call(s): file_churn",
+    "input_tokens": 2518,
+    "output_tokens": 95,
+    "latency_ms": 15983,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "file_churn",
+    "args": {
+     "days": 90,
+     "paths": [
+      "pydantic/main.py",
+      "pydantic/root_model.py",
+      "pydantic/type_adapter.py",
+      "tests/test_computed_fields.py"
+     ]
+    },
+    "summary": "4 paths over 90d; top: pydantic/main.py=5, pydantic/type_adapter.py=3, pydantic/root_model.py=1",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 63,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 3",
+    "args": {},
+    "summary": "1 tool call(s): author_history",
+    "input_tokens": 2703,
+    "output_tokens": 36,
+    "latency_ms": 20839,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "author_history",
+    "args": {
+     "author": "Viicos"
+    },
+    "summary": "Viicos: 371 merged, 0 reverted",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 42,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 4",
+    "args": {},
+    "summary": "1 tool call(s): ci_status",
+    "input_tokens": 3161,
+    "output_tokens": 30,
+    "latency_ms": 21792,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "ci_status",
+    "args": {},
+    "summary": "passing: 65 check runs",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 4,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 5",
+    "args": {},
+    "summary": "done gathering",
+    "input_tokens": 3251,
+    "output_tokens": 638,
+    "latency_ms": 24151,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "assessment",
+    "args": {},
+    "summary": "1 factor(s), confidence 0.97",
+    "input_tokens": 3750,
+    "output_tokens": 622,
+    "latency_ms": 32336,
+    "error": null
+   }
+  ],
+  "input_tokens": 15887,
+  "output_tokens": 1465,
+  "tool_calls": 4,
+  "cost_usd": 0.003262
+ }
+}

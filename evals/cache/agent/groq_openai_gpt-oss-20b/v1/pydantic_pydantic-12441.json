@@ -1,0 +1,166 @@
+{
+ "repo": "pydantic/pydantic",
+ "number": 12441,
+ "label": 0,
+ "model": "groq:openai/gpt-oss-20b",
+ "prompt_version": "v1",
+ "stats": {
+  "additions": 1,
+  "deletions": 2,
+  "changed_files": 1
+ },
+ "verdict": {
+  "repo": "pydantic/pydantic",
+  "pr_number": 12441,
+  "head_sha": "4a457b27bc936228c976c22beca8560f3dd0e40b",
+  "level": "low",
+  "score": 6,
+  "reason": null,
+  "assessment": {
+   "factors": [
+    {
+     "kind": "config_change",
+     "severity": 1,
+     "evidence": "@@ -18,7 +18,6 @@ authors = [\\n     {name = 'David Hewitt', email = 'mail@davidhewitt.io'},\\n     {name = 'Alex Hall', email = 'alex.mojaki@gmail.com'},\\n     {name = 'Victorien Plot', email = 'contact@vctrn.dev'},\\n-    {name = 'Douwe Maan', email = 'hi@douwe.me'},\\n ]\\n license = 'MIT'\\n license-files = ['LICENSE']\\n@@ -191,7 +190,7 @@ required-version = '>=0.8.4'\\n \\n # configuring https://github.com/pydantic/hooky\\n [tool.hooky]\\n-reviewers = ['Viicos', 'DouweM']\\n+reviewers = ['Viicos']"
+    }
+   ],
+   "summary": "The pull request only edits pyproject.toml to remove a reviewer; it does not touch code or dependencies. All CI checks pass and the author has a solid merge history. The change is purely declarative and poses minimal risk.",
+   "confidence": 0.9
+  },
+  "breakdown": {
+   "config_change": 6,
+   "size_lines": 0,
+   "size_files": 0
+  },
+  "rules": []
+ },
+ "trace": {
+  "repo": "pydantic/pydantic",
+  "pr_number": 12441,
+  "provider": "groq",
+  "model": "openai/gpt-oss-20b",
+  "prompt_version": "v1",
+  "input_cost_per_mtok": 0.075,
+  "output_cost_per_mtok": 0.3,
+  "started_at": "2026-10-26T09:20:44.995993Z",
+  "latency_ms": 59900,
+  "steps": [
+   {
+    "kind": "llm",
+    "name": "turn 1",
+    "args": {},
+    "summary": "1 tool call(s): get_diff",
+    "input_tokens": 504,
+    "output_tokens": 35,
+    "latency_ms": 18570,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "get_diff",
+    "args": {
+     "": ""
+    },
+    "summary": "1 files +1/-2, not truncated",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 6,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 2",
+    "args": {},
+    "summary": "1 tool call(s): file_churn",
+    "input_tokens": 863,
+    "output_tokens": 89,
+    "latency_ms": 5653,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "file_churn",
+    "args": {
+     "days": 90,
+     "paths": [
+      "pyproject.toml"
+     ]
+    },
+    "summary": "1 paths over 90d; top: pyproject.toml=15",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 5,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 3",
+    "args": {},
+    "summary": "1 tool call(s): author_history",
+    "input_tokens": 971,
+    "output_tokens": 410,
+    "latency_ms": 6813,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "author_history",
+    "args": {
+     "author": "DouweM"
+    },
+    "summary": "DouweM: 3 merged, 0 reverted",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 4,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 4",
+    "args": {},
+    "summary": "1 tool call(s): ci_status",
+    "input_tokens": 1177,
+    "output_tokens": 144,
+    "latency_ms": 11812,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "ci_status",
+    "args": {
+     "repo": "pydantic/pydantic",
+     "sha": "4a457b27bc936228c976c22beca8560f3dd0e40b"
+    },
+    "summary": "passing: 68 check runs",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 3,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 5",
+    "args": {},
+    "summary": "done gathering",
+    "input_tokens": 1299,
+    "output_tokens": 474,
+    "latency_ms": 887,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "assessment",
+    "args": {},
+    "summary": "1 factor(s), confidence 0.9",
+    "input_tokens": 1676,
+    "output_tokens": 685,
+    "latency_ms": 16143,
+    "error": null
+   }
+  ],
+  "input_tokens": 6490,
+  "output_tokens": 1837,
+  "tool_calls": 4,
+  "cost_usd": 0.001038
+ }
+}

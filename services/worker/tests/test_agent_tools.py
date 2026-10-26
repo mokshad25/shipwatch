@@ -1,6 +1,6 @@
 """The agent's four GitHub tools, replayed from recorded encode/httpx responses (SPEC_W3)."""
 
-from datetime import datetime
+from datetime import UTC, datetime
 
 import pytest
 from agent.tools import (
@@ -255,3 +255,21 @@ async def test_ci_none_without_check_runs(github, gh_api):
     ci = await ci_status(github, REPO, "abc")
 
     assert (ci.state, ci.total, ci.counts) == ("none", 0, {})
+
+
+async def test_author_history_before_a_cutoff(github, gh_api):
+    """Evals pass the PR's opening time, so the PR's own later revert can't leak in."""
+    cutoff = " merged:<2024-05-01T10:00:00Z"
+    merged = gh_api.get(
+        "/search/issues", params={"q": f"repo:{REPO} is:pr is:merged author:someone{cutoff}"}
+    ).respond(json={"total_count": 0, "items": []})
+    reverts = gh_api.get(
+        "/search/issues", params={"q": f"repo:{REPO} is:pr is:merged in:title Revert{cutoff}"}
+    ).respond(json={"total_count": 0, "items": []})
+
+    history = await author_history(
+        github, REPO, "someone", before=datetime(2024, 5, 1, 10, tzinfo=UTC)
+    )
+
+    assert merged.called and reverts.called
+    assert history.notes == ["only PRs merged before 2024-05-01T10:00:00Z"]

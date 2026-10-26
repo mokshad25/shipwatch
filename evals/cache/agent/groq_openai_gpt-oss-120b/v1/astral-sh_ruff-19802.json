@@ -1,0 +1,174 @@
+{
+ "repo": "astral-sh/ruff",
+ "number": 19802,
+ "label": 0,
+ "model": "groq:openai/gpt-oss-120b",
+ "prompt_version": "v1",
+ "stats": {
+  "additions": 61,
+  "deletions": 20,
+  "changed_files": 2
+ },
+ "verdict": {
+  "repo": "astral-sh/ruff",
+  "pr_number": 19802,
+  "head_sha": "967f90b271d52e7be3a4248922428123a6e725e2",
+  "level": "medium",
+  "score": 40,
+  "reason": null,
+  "assessment": {
+   "factors": [
+    {
+     "kind": "hot_files",
+     "severity": 2,
+     "evidence": "file_churn output shows infer.rs has 100 commits in the last 90 days: \"crates/ty_python_semantic/src/types/infer.rs\":{\"commits\":100,\"capped\":true}"
+    },
+    {
+     "kind": "failing_ci",
+     "severity": 2,
+     "evidence": "ci_status output reports no CI runs for the head SHA: \"total\":0,\"state\":\"none\""
+    },
+    {
+     "kind": "missing_tests",
+     "severity": 2,
+     "evidence": "get_diff shows only two files changed (nested.md and infer.rs) with no test files added or modified: \"files\":[{\"filename\":\"crates/ty_python_semantic/resources/mdtest/narrow/conditionals/nested.md\"},{\"filename\":\"crates/ty_python_semantic/src/types/infer.rs\"}]"
+    }
+   ],
+   "summary": "The PR modifies core type‑inference logic in a frequently changed file and lacks any CI validation or accompanying unit tests. While the author is experienced, the missing test coverage and absent CI increase the chance of regressions. Proceed with caution and run the full test suite before merging.",
+   "confidence": 0.9
+  },
+  "breakdown": {
+   "failing_ci": 20,
+   "hot_files": 10,
+   "missing_tests": 10,
+   "size_lines": 0,
+   "size_files": 0
+  },
+  "rules": []
+ },
+ "trace": {
+  "repo": "astral-sh/ruff",
+  "pr_number": 19802,
+  "provider": "groq",
+  "model": "openai/gpt-oss-120b",
+  "prompt_version": "v1",
+  "input_cost_per_mtok": 0.15,
+  "output_cost_per_mtok": 0.6,
+  "started_at": "2026-10-26T09:22:53.652991Z",
+  "latency_ms": 96616,
+  "steps": [
+   {
+    "kind": "llm",
+    "name": "turn 1",
+    "args": {},
+    "summary": "1 tool call(s): get_diff",
+    "input_tokens": 503,
+    "output_tokens": 41,
+    "latency_ms": 10792,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "get_diff",
+    "args": {},
+    "summary": "2 files +61/-20, not truncated",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 2,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 2",
+    "args": {},
+    "summary": "1 tool call(s): file_churn",
+    "input_tokens": 1713,
+    "output_tokens": 98,
+    "latency_ms": 9816,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "file_churn",
+    "args": {
+     "days": 90,
+     "paths": [
+      "crates/ty_python_semantic/resources/mdtest/narrow/conditionals/nested.md",
+      "crates/ty_python_semantic/src/types/infer.rs"
+     ]
+    },
+    "summary": "2 paths over 90d; top: crates/ty_python_semantic/src/types/infer.rs=100+, crates/ty_python_semantic/resources/mdtest/narrow/conditionals/nested.md=6",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 1602,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 3",
+    "args": {},
+    "summary": "1 tool call(s): author_history",
+    "input_tokens": 1885,
+    "output_tokens": 57,
+    "latency_ms": 12186,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "author_history",
+    "args": {
+     "author": "mtshiba"
+    },
+    "summary": "mtshiba: 18 merged, 0 reverted",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 1872,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 4",
+    "args": {},
+    "summary": "1 tool call(s): ci_status",
+    "input_tokens": 2331,
+    "output_tokens": 30,
+    "latency_ms": 10607,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "ci_status",
+    "args": {},
+    "summary": "none: 0 check runs",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 514,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 5",
+    "args": {},
+    "summary": "done gathering",
+    "input_tokens": 2407,
+    "output_tokens": 925,
+    "latency_ms": 21690,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "assessment",
+    "args": {},
+    "summary": "3 factor(s), confidence 0.9",
+    "input_tokens": 3190,
+    "output_tokens": 826,
+    "latency_ms": 27509,
+    "error": null
+   }
+  ],
+  "input_tokens": 12029,
+  "output_tokens": 1977,
+  "tool_calls": 4,
+  "cost_usd": 0.002991
+ }
+}

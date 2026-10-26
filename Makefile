@@ -1,4 +1,4 @@
-.PHONY: up down logs db deps test lint fmt migrate forward capture sandbox-pr deploy-demo load-demo demo-logs
+.PHONY: up down logs db deps test lint fmt migrate forward capture sandbox-pr deploy-demo load-demo demo-logs dataset eval
 
 # Where `make forward` delivers: 8000 = ingester, 8001 = capture relay (`make forward FORWARD_PORT=8001`).
 FORWARD_PORT ?= 8000
@@ -59,6 +59,12 @@ load-demo: ## Send RATE req/s (default 20) to demoapp for DURATION seconds (defa
 
 demo-logs: ## Follow demoapp's JSON logs
 	docker compose --profile demo logs -f demoapp
+
+dataset: ## Rebuild evals/data/prs.jsonl from GitHub (needs GITHUB_TOKEN; see docs/EVALS.md)
+	uv run python evals/build_dataset.py $(DATASET_ARGS)
+
+eval: ## Run the agent over the eval dataset and write evals/reports/ (EVAL_ARGS="--prompt v2 ...")
+	uv run python evals/run.py $(EVAL_ARGS)
 
 .env:
 	cp .env.example .env

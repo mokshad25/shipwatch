@@ -1,0 +1,173 @@
+{
+ "repo": "astral-sh/uv",
+ "number": 15468,
+ "label": 0,
+ "model": "groq:openai/gpt-oss-120b",
+ "prompt_version": "v1",
+ "stats": {
+  "additions": 53,
+  "deletions": 106,
+  "changed_files": 1
+ },
+ "verdict": {
+  "repo": "astral-sh/uv",
+  "pr_number": 15468,
+  "head_sha": "ad7305804ebc84318c56c8186fa8f99ee49d6d03",
+  "level": "medium",
+  "score": 29,
+  "reason": null,
+  "assessment": {
+   "factors": [
+    {
+     "kind": "hot_files",
+     "severity": 1,
+     "evidence": "file_churn output shows \"crates/uv/tests/it/format.rs\": {\"commits\":3}"
+    },
+    {
+     "kind": "new_author",
+     "severity": 1,
+     "evidence": "author_history output shows merged_count:1 and is_new_author:false for author \"pposca\""
+    },
+    {
+     "kind": "failing_ci",
+     "severity": 2,
+     "evidence": "ci_status output shows total:0, state:\"none\" for sha ad7305804ebc84318c56c8186fa8f99ee49d6d03"
+    }
+   ],
+   "summary": "The PR only modifies a single test file with modest line changes and does not affect production code. The author has a recent merged PR and the test file has limited recent churn, but CI checks have not yet run, so the risk is low but CI verification is needed.",
+   "confidence": 0.8
+  },
+  "breakdown": {
+   "failing_ci": 20,
+   "hot_files": 5,
+   "new_author": 4,
+   "size_lines": 0,
+   "size_files": 0
+  },
+  "rules": []
+ },
+ "trace": {
+  "repo": "astral-sh/uv",
+  "pr_number": 15468,
+  "provider": "groq",
+  "model": "openai/gpt-oss-120b",
+  "prompt_version": "v1",
+  "input_cost_per_mtok": 0.15,
+  "output_cost_per_mtok": 0.6,
+  "started_at": "2026-10-26T09:17:58.420209Z",
+  "latency_ms": 81835,
+  "steps": [
+   {
+    "kind": "llm",
+    "name": "turn 1",
+    "args": {},
+    "summary": "1 tool call(s): get_diff",
+    "input_tokens": 503,
+    "output_tokens": 28,
+    "latency_ms": 6649,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "get_diff",
+    "args": {},
+    "summary": "1 files +53/-106, truncated",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 2,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 2",
+    "args": {},
+    "summary": "1 tool call(s): file_churn",
+    "input_tokens": 2052,
+    "output_tokens": 78,
+    "latency_ms": 13699,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "file_churn",
+    "args": {
+     "days": 90,
+     "paths": [
+      "crates/uv/tests/it/format.rs"
+     ]
+    },
+    "summary": "1 paths over 90d; top: crates/uv/tests/it/format.rs=3",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 557,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 3",
+    "args": {},
+    "summary": "1 tool call(s): author_history",
+    "input_tokens": 2171,
+    "output_tokens": 63,
+    "latency_ms": 14784,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "author_history",
+    "args": {
+     "author": "pposca"
+    },
+    "summary": "pposca: 1 merged, 0 reverted",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 1746,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 4",
+    "args": {},
+    "summary": "1 tool call(s): ci_status",
+    "input_tokens": 2295,
+    "output_tokens": 104,
+    "latency_ms": 13663,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "ci_status",
+    "args": {},
+    "summary": "none: 0 check runs",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 520,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 5",
+    "args": {},
+    "summary": "done gathering",
+    "input_tokens": 2371,
+    "output_tokens": 630,
+    "latency_ms": 2032,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "assessment",
+    "args": {},
+    "summary": "3 factor(s), confidence 0.8",
+    "input_tokens": 2894,
+    "output_tokens": 574,
+    "latency_ms": 28177,
+    "error": null
+   }
+  ],
+  "input_tokens": 12286,
+  "output_tokens": 1477,
+  "tool_calls": 4,
+  "cost_usd": 0.002729
+ }
+}

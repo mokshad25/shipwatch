@@ -74,7 +74,12 @@ def _ci_summary(c: CiStatus) -> str:
     return f"{c.state}: {c.total} check runs{failing}"
 
 
-def make_toolbox(gh: GitHubClient, repo: str, pr_number: int) -> dict[str, AgentTool]:
+def make_toolbox(
+    gh: GitHubClient, repo: str, pr_number: int, *, point_in_time: bool = False
+) -> dict[str, AgentTool]:
+    """`point_in_time`: author_history sees only PRs merged before this PR was opened. Evals set
+    it, since they review PRs long after the fact (file_churn always works that way)."""
+
     async def get_diff(_: NoArgs) -> Diff:
         return await _get_diff(gh, repo, pr_number)
 
@@ -85,7 +90,11 @@ def make_toolbox(gh: GitHubClient, repo: str, pr_number: int) -> dict[str, Agent
         return await _file_churn(gh, repo, args.paths, args.days, now=opened, ref=diff.base_ref)
 
     async def author_history(args: AuthorArgs) -> AuthorHistory:
-        return await _author_history(gh, repo, args.author)
+        before = None
+        if point_in_time:
+            diff = await _get_diff(gh, repo, pr_number)
+            before = datetime.fromisoformat(diff.created_at) if diff.created_at else None
+        return await _author_history(gh, repo, args.author, before)
 
     async def ci_status(_: NoArgs) -> CiStatus:
         # The PR's head commit; get_diff is cached, so this costs no extra request after it.
