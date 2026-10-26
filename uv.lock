@@ -4,6 +4,7 @@ requires-python = ">=3.12"
 
 [manifest]
 members = [
+    "demoapp",
     "ingester",
     "shipwatch",
     "shipwatch-common",
@@ -324,6 +325,25 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/3b/88/db77d27600432b3ea0a568825c6135f7213b1f80a3c519d51d54a88a01c1/confluent_kafka-2.16.0-cp314-cp314t-manylinux_2_28_s390x.whl", hash = "sha256:d3543790aa73a62a68c988c4f5e31e8d3eaedd03c88f4d20021681e54c43d419", size = 6100248, upload-time = "2026-10-07T09:13:22.95Z" },
     { url = "https://files.pythonhosted.org/packages/44/a1/31e76b2694b2a4ebda79823e0c455972f0aae6a83de580d0c2d4e00c4458/confluent_kafka-2.16.0-cp314-cp314t-manylinux_2_28_x86_64.whl", hash = "sha256:8d56025d586601219b75485865ac2f5021a707d51e860e2fc8d8a53667731e9d", size = 4963986, upload-time = "2026-10-07T09:13:24.881Z" },
     { url = "https://files.pythonhosted.org/packages/66/25/8f2cfb400c172a5de4e954a2e2f7ff86ccc6ec873be9e7da3ef961aaa638/confluent_kafka-2.16.0-cp314-cp314t-win_amd64.whl", hash = "sha256:5a68941472a227d535a7daa62398167d3f44adb19374e62dc593fc47493b5a3b", size = 4856087, upload-time = "2026-10-07T09:13:26.493Z" },
+]
+
+[[package]]
+name = "demoapp"
+version = "0.1.0"
+source = { editable = "services/demoapp" }
+dependencies = [
+    { name = "fastapi" },
+    { name = "httpx" },
+    { name = "shipwatch-common" },
+    { name = "uvicorn", extra = ["standard"] },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "fastapi", specifier = ">=0.115" },
+    { name = "httpx", specifier = ">=0.27" },
+    { name = "shipwatch-common", editable = "libs/common" },
+    { name = "uvicorn", extras = ["standard"], specifier = ">=0.30" },
 ]
 
 [[package]]
@@ -1569,6 +1589,7 @@ name = "shipwatch"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "demoapp" },
     { name = "ingester" },
     { name = "shipwatch-common" },
     { name = "worker" },
@@ -1585,6 +1606,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "demoapp", editable = "services/demoapp" },
     { name = "ingester", editable = "services/ingester" },
     { name = "shipwatch-common", editable = "libs/common" },
     { name = "worker", editable = "services/worker" },

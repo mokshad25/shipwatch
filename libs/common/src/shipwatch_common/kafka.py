@@ -5,6 +5,7 @@ confluent-kafka is synchronous; callers in async code run `flush_results` in a t
 
 import logging
 import uuid
+from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from typing import Any
@@ -93,6 +94,27 @@ class Producer:
             )
         except (BufferError, KafkaException) as exc:  # local queue full, invalid topic, ...
             self._results[index] = DeliveryResult(error=repr(exc))
+
+    def publish_nowait(
+        self,
+        topic: str,
+        key: str | bytes | None,
+        value: bytes,
+        on_error: Callable[[str], None] | None = None,
+    ) -> bool:
+        """Fire and forget: no result is kept (`flush_results` won't report it), so it suits
+        unbounded streams like log lines. Returns False if the message couldn't even be queued;
+        `on_error` is called later if it was queued but not delivered."""
+
+        def on_delivery(err: KafkaError | None, _: Message) -> None:
+            if err is not None and on_error is not None:
+                on_error(str(err))
+
+        try:
+            self._producer.produce(topic, key=key, value=value, on_delivery=on_delivery)
+        except (BufferError, KafkaException):
+            return False
+        return True
 
     def publish_envelope(self, topic: str, key: str, envelope: EventEnvelope) -> None:
         self.publish(topic, key, envelope.to_bytes())

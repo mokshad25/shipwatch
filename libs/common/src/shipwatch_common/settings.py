@@ -22,6 +22,8 @@ class ServiceSettings(DatabaseSettings):
     pr_events_topic: str = "pr-events"
     pr_events_dlq_topic: str = "pr-events.dlq"
     pr_verdicts_topic: str = "pr-verdicts"
+    logs_topic: str = "logs"
+    deploys_topic: str = "deploys"
     redis_url: str = "redis://localhost:6379/0"
     redis_key_prefix: str = "shipwatch:"
 

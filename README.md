@@ -100,6 +100,9 @@ Full contract: [docs/SPEC_W1.md](docs/SPEC_W1.md).
 | `make forward` | forward real GitHub webhooks to localhost |
 | `make sandbox-pr` | generate a full PR lifecycle on `sandbox` |
 | `make capture` | record deliveries as test fixtures |
+| `make deploy-demo SHA=…` | rebuild demoapp at a commit (`SHA=local` = working tree) and publish to `deploys` |
+| `make load-demo` | 20 req/s against demoapp for 60 s (`RATE=`, `DURATION=`) |
+| `make demo-logs` | follow demoapp's JSON logs |
 
 ## Operations
 

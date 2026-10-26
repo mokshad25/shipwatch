@@ -1,13 +1,16 @@
-.PHONY: up down logs db deps test lint fmt migrate forward capture sandbox-pr
+.PHONY: up down logs db deps test lint fmt migrate forward capture sandbox-pr deploy-demo load-demo demo-logs
 
 # Where `make forward` delivers: 8000 = ingester, 8001 = capture relay (`make forward FORWARD_PORT=8001`).
 FORWARD_PORT ?= 8000
+# `make load-demo` defaults (docs/SPEC_W4.md).
+RATE ?= 20
+DURATION ?= 60
 
 up: .env ## Build and start the whole stack (Postgres, Redpanda + Console, ingester), wait until healthy
 	docker compose up --build -d --wait
 
-down: ## Stop all containers (data volume is kept)
-	docker compose down
+down: ## Stop all containers, demoapp included (data volume is kept)
+	docker compose --profile demo down
 
 logs: ## Follow ingester and worker logs
 	docker compose logs -f ingester worker
@@ -46,6 +49,16 @@ capture: ## Save each forwarded delivery as a test fixture and relay it to the i
 
 sandbox-pr: .env ## Open, update, close, reopen and merge a throwaway PR against `sandbox`
 	./scripts/sandbox_pr.sh
+
+deploy-demo: .env ## Deploy demoapp at SHA (or SHA=local) and publish the deploy marker; PR=n to set the PR
+	@test -n "$(SHA)" || { echo "usage: make deploy-demo SHA=<commit> [PR=<number>]" >&2; exit 1; }
+	uv run python scripts/deploy_demo.py "$(SHA)" $(if $(PR),--pr $(PR))
+
+load-demo: ## Send RATE req/s (default 20) to demoapp for DURATION seconds (default 60)
+	uv run demoapp-load --url http://localhost:8100 --rate $(RATE) --duration $(DURATION)
+
+demo-logs: ## Follow demoapp's JSON logs
+	docker compose --profile demo logs -f demoapp
 
 .env:
 	cp .env.example .env

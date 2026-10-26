@@ -70,6 +70,9 @@ services:
         create pr-events 3
         create pr-events.dlq 1
         create pr-verdicts 3
+        create logs 3
+        create deploys 1
+        create anomalies 1
     depends_on:
       redpanda:
         condition: service_healthy
@@ -133,6 +136,30 @@ services:
         condition: service_healthy
       mongo:
         condition: service_healthy
+
+  # Week-4 demo target. Only `make deploy-demo` builds and (re)starts it, at a given commit:
+  # DEMOAPP_CONTEXT is the `git archive` of that commit, DEMOAPP_SHA its hash.
+  demoapp:
+    profiles: [demo]
+    build:
+      context: ${DEMOAPP_CONTEXT:-.}
+      dockerfile: services/demoapp/Dockerfile
+      args:
+        GIT_SHA: ${DEMOAPP_SHA:-dev}
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: redpanda:9092
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    ports:
+      - "8100:8100"
+    stop_grace_period: 10s
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8100/healthz')"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+    depends_on:
+      redpanda-init:
+        condition: service_completed_successfully
 
 volumes:
   pgdata:
