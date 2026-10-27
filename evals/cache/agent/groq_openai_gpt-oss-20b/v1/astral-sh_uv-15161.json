@@ -1,0 +1,191 @@
+{
+ "repo": "astral-sh/uv",
+ "number": 15161,
+ "label": 1,
+ "model": "groq:openai/gpt-oss-20b",
+ "prompt_version": "v1",
+ "stats": {
+  "additions": 27,
+  "deletions": 118,
+  "changed_files": 6
+ },
+ "verdict": {
+  "repo": "astral-sh/uv",
+  "pr_number": 15161,
+  "head_sha": "64991b8d16a7e5e9c1d8730032d457c846923c68",
+  "level": "high",
+  "score": 64,
+  "reason": null,
+  "assessment": {
+   "factors": [
+    {
+     "kind": "large_diff",
+     "severity": 2,
+     "evidence": "{\"repo\":\"astral-sh/uv\",\"pr_number\":15161,\"changed_files\":6,\"additions\":27,\"deletions\":118}"
+    },
+    {
+     "kind": "hot_files",
+     "severity": 2,
+     "evidence": "{\"repo\":\"astral-sh/uv\",\"files\":{\"crates/uv-settings/src/settings.rs\":{\"commits\":13},\"crates/uv-workspace/src/pyproject.rs\":{\"commits\":14},\"crates/uv-workspace/src/workspace.rs\":{\"commits\":8},\"crates/uv/tests/it/sync.rs\":{\"commits\":45},\"docs/reference/settings.md\":{\"commits\":14},\"uv.schema.json\":{\"commits\":24}}}"
+    },
+    {
+     "kind": "failing_ci",
+     "severity": 3,
+     "evidence": "{\"repo\":\"astral-sh/uv\",\"sha\":\"64991b8d16a7e5e9c1d8730032d457c846923c68\",\"total\":0,\"state\":\"none\"}"
+    },
+    {
+     "kind": "config_change",
+     "severity": 2,
+     "evidence": "The diff removes the `extra_build_dependencies` and `extra_build_variables` fields from the `ToolUv` struct and updates documentation accordingly."
+    }
+   ],
+   "summary": "The PR modifies several core configuration files, removing options and changing documentation. It touches hot files, has a large diff, and lacks CI validation, raising the risk of a runtime failure.",
+   "confidence": 0.8
+  },
+  "breakdown": {
+   "config_change": 12,
+   "failing_ci": 30,
+   "hot_files": 10,
+   "large_diff": 12,
+   "size_lines": 0,
+   "size_files": 0
+  },
+  "rules": [
+   "serious_failing_ci"
+  ]
+ },
+ "trace": {
+  "repo": "astral-sh/uv",
+  "pr_number": 15161,
+  "provider": "groq",
+  "model": "openai/gpt-oss-20b",
+  "prompt_version": "v1",
+  "input_cost_per_mtok": 0.075,
+  "output_cost_per_mtok": 0.3,
+  "started_at": "2026-10-27T06:28:58.647920Z",
+  "latency_ms": 211941,
+  "steps": [
+   {
+    "kind": "llm",
+    "name": "turn 1",
+    "args": {},
+    "summary": "1 tool call(s): get_diff",
+    "input_tokens": 503,
+    "output_tokens": 34,
+    "latency_ms": 15252,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "get_diff",
+    "args": {
+     "": ""
+    },
+    "summary": "6 files +27/-118, not truncated",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 7,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 2",
+    "args": {},
+    "summary": "1 tool call(s): file_churn",
+    "input_tokens": 3922,
+    "output_tokens": 85,
+    "latency_ms": 30566,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "file_churn",
+    "args": {
+     "days": 90,
+     "paths": [
+      "crates/uv-settings/src/settings.rs",
+      "crates/uv-workspace/src/pyproject.rs",
+      "crates/uv-workspace/src/workspace.rs",
+      "crates/uv/tests/it/sync.rs",
+      "docs/reference/settings.md",
+      "uv.schema.json"
+     ]
+    },
+    "summary": "6 paths over 90d; top: crates/uv/tests/it/sync.rs=45, uv.schema.json=24, crates/uv-workspace/src/pyproject.rs=14",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 10,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 3",
+    "args": {},
+    "summary": "1 tool call(s): author_history",
+    "input_tokens": 4178,
+    "output_tokens": 29,
+    "latency_ms": 32039,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "author_history",
+    "args": {
+     "author": "charliermarsh"
+    },
+    "summary": "charliermarsh: 2800 merged, 0 reverted",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 11,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 4",
+    "args": {},
+    "summary": "1 tool call(s): ci_status",
+    "input_tokens": 4645,
+    "output_tokens": 38,
+    "latency_ms": 31150,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "ci_status",
+    "args": {
+     "pr_number": 15161,
+     "repo": "astral-sh/uv"
+    },
+    "summary": "none: 0 check runs",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 17,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 5",
+    "args": {},
+    "summary": "done gathering",
+    "input_tokens": 4740,
+    "output_tokens": 1272,
+    "latency_ms": 41019,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "assessment",
+    "args": {},
+    "summary": "4 factor(s), confidence 0.8",
+    "input_tokens": 5180,
+    "output_tokens": 1454,
+    "latency_ms": 61837,
+    "error": null
+   }
+  ],
+  "input_tokens": 23168,
+  "output_tokens": 2912,
+  "tool_calls": 4,
+  "cost_usd": 0.002611
+ }
+}

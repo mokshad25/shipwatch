@@ -1,0 +1,191 @@
+{
+ "repo": "astral-sh/ruff",
+ "number": 18010,
+ "label": 1,
+ "model": "groq:openai/gpt-oss-20b",
+ "prompt_version": "v1",
+ "stats": {
+  "additions": 317,
+  "deletions": 75,
+  "changed_files": 3
+ },
+ "verdict": {
+  "repo": "astral-sh/ruff",
+  "pr_number": 18010,
+  "head_sha": "2b59009010f164c1d27ee74adadbcb11f0b55238",
+  "level": "high",
+  "score": 73,
+  "reason": null,
+  "assessment": {
+   "factors": [
+    {
+     "kind": "large_diff",
+     "severity": 3,
+     "evidence": "{\"changed_files\":3,\"additions\":317,\"deletions\":75}"
+    },
+    {
+     "kind": "hot_files",
+     "severity": 2,
+     "evidence": "\"crates/ty_python_semantic/src/semantic_index/builder.rs\":{\"commits\":9,\"capped\":false}"
+    },
+    {
+     "kind": "failing_ci",
+     "severity": 3,
+     "evidence": "\"state\":\"none\""
+    },
+    {
+     "kind": "missing_tests",
+     "severity": 2,
+     "evidence": "\"files\":[{\"filename\":\"crates/ty_python_semantic/resources/mdtest/boolean/short_circuit.md\"},{\"filename\":\"crates/ty_python_semantic/resources/mdtest/narrow/conditionals/boolean.md\"},{\"filename\":\"crates/ty_python_semantic/src/semantic_index/builder.rs\"}]"
+    }
+   ],
+   "summary": "This PR introduces a large diff to core semantic‑index logic and modifies a hot file without CI checks. The missing tests and lack of CI run increase the risk of a type‑inference regression.",
+   "confidence": 0.8
+  },
+  "breakdown": {
+   "failing_ci": 30,
+   "hot_files": 10,
+   "large_diff": 18,
+   "missing_tests": 10,
+   "size_lines": 5,
+   "size_files": 0
+  },
+  "rules": [
+   "serious_failing_ci"
+  ]
+ },
+ "trace": {
+  "repo": "astral-sh/ruff",
+  "pr_number": 18010,
+  "provider": "groq",
+  "model": "openai/gpt-oss-20b",
+  "prompt_version": "v1",
+  "input_cost_per_mtok": 0.075,
+  "output_cost_per_mtok": 0.3,
+  "started_at": "2026-10-27T06:26:43.067074Z",
+  "latency_ms": 135564,
+  "steps": [
+   {
+    "kind": "llm",
+    "name": "turn 1",
+    "args": {},
+    "summary": "1 tool call(s): get_diff",
+    "input_tokens": 503,
+    "output_tokens": 29,
+    "latency_ms": 584,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "get_diff",
+    "args": {
+     "": ""
+    },
+    "summary": "3 files +317/-75, truncated",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 1,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 2",
+    "args": {},
+    "summary": "1 tool call(s): file_churn",
+    "input_tokens": 3223,
+    "output_tokens": 123,
+    "latency_ms": 823,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "file_churn",
+    "args": {
+     "days": 90,
+     "paths": [
+      "crates/ty_python_semantic/resources/mdtest/boolean/short_circuit.md",
+      "crates/ty_python_semantic/resources/mdtest/narrow/conditionals/boolean.md",
+      "crates/ty_python_semantic/src/semantic_index/builder.rs"
+     ],
+     "pr_number": 18010,
+     "repo": "astral-sh/ruff"
+    },
+    "summary": "3 paths over 90d; top: crates/ty_python_semantic/src/semantic_index/builder.rs=9, crates/ty_python_semantic/resources/mdtest/boolean/short_circuit.md=1, crates/ty_python_semantic/resources/mdtest/narrow/conditionals/boolean.md=1",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 3,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 3",
+    "args": {},
+    "summary": "1 tool call(s): author_history",
+    "input_tokens": 3463,
+    "output_tokens": 48,
+    "latency_ms": 816,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "author_history",
+    "args": {
+     "author": "TomerBin",
+     "repo": "astral-sh/ruff"
+    },
+    "summary": "TomerBin: 12 merged, 0 reverted",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 8,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 4",
+    "args": {},
+    "summary": "1 tool call(s): ci_status",
+    "input_tokens": 3923,
+    "output_tokens": 83,
+    "latency_ms": 57381,
+    "error": "provider rejected the generation (tool_use_failed); retried"
+   },
+   {
+    "kind": "tool",
+    "name": "ci_status",
+    "args": {
+     "pr_number": 18010,
+     "repo": "astral-sh/ruff"
+    },
+    "summary": "none: 0 check runs",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 16,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 5",
+    "args": {},
+    "summary": "done gathering",
+    "input_tokens": 4015,
+    "output_tokens": 763,
+    "latency_ms": 31007,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "assessment",
+    "args": {},
+    "summary": "4 factor(s), confidence 0.8",
+    "input_tokens": 4793,
+    "output_tokens": 1459,
+    "latency_ms": 44878,
+    "error": null
+   }
+  ],
+  "input_tokens": 19920,
+  "output_tokens": 2505,
+  "tool_calls": 4,
+  "cost_usd": 0.002246
+ }
+}

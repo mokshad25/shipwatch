@@ -1,0 +1,178 @@
+{
+ "repo": "astral-sh/ruff",
+ "number": 20156,
+ "label": 1,
+ "model": "groq:openai/gpt-oss-120b",
+ "prompt_version": "v1",
+ "stats": {
+  "additions": 15,
+  "deletions": 15,
+  "changed_files": 6
+ },
+ "verdict": {
+  "repo": "astral-sh/ruff",
+  "pr_number": 20156,
+  "head_sha": "cf4a1d53300256e22f687eab2317eb3ee4a3cb26",
+  "level": "medium",
+  "score": 35,
+  "reason": null,
+  "assessment": {
+   "factors": [
+    {
+     "kind": "hot_files",
+     "severity": 2,
+     "evidence": "\"crates/ty_python_semantic/src/types/infer.rs\":{\"commits\":100,\"capped\":true}"
+    },
+    {
+     "kind": "failing_ci",
+     "severity": 2,
+     "evidence": "\"state\":\"none\""
+    },
+    {
+     "kind": "missing_tests",
+     "severity": 1,
+     "evidence": "\"changed_files\":6,\"additions\":15,\"deletions\":15\""
+    }
+   ],
+   "summary": "The PR only swaps an error‑code identifier and updates documentation. While it touches a frequently edited core file and lacks CI checks, the author is experienced and the change is minimal, so the overall risk is low.",
+   "confidence": 0.95
+  },
+  "breakdown": {
+   "failing_ci": 20,
+   "hot_files": 10,
+   "missing_tests": 5,
+   "size_lines": 0,
+   "size_files": 0
+  },
+  "rules": []
+ },
+ "trace": {
+  "repo": "astral-sh/ruff",
+  "pr_number": 20156,
+  "provider": "groq",
+  "model": "openai/gpt-oss-120b",
+  "prompt_version": "v1",
+  "input_cost_per_mtok": 0.15,
+  "output_cost_per_mtok": 0.6,
+  "started_at": "2026-10-27T06:30:05.847868Z",
+  "latency_ms": 122412,
+  "steps": [
+   {
+    "kind": "llm",
+    "name": "turn 1",
+    "args": {},
+    "summary": "1 tool call(s): get_diff",
+    "input_tokens": 503,
+    "output_tokens": 36,
+    "latency_ms": 7266,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "get_diff",
+    "args": {},
+    "summary": "6 files +15/-15, not truncated",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 5,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 2",
+    "args": {},
+    "summary": "1 tool call(s): file_churn",
+    "input_tokens": 1998,
+    "output_tokens": 237,
+    "latency_ms": 14328,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "file_churn",
+    "args": {
+     "days": 90,
+     "paths": [
+      "crates/ty_python_semantic/resources/mdtest/attributes.md",
+      "crates/ty_python_semantic/resources/mdtest/diagnostics/attribute_assignment.md",
+      "crates/ty_python_semantic/resources/mdtest/protocols.md",
+      "crates/ty_python_semantic/resources/mdtest/snapshots/attribute_assignment…_-_Attribute_assignment_-_`ClassVar`s_(8d7cca27987b099d).snap",
+      "crates/ty_python_semantic/resources/mdtest/type_qualifiers/classvar.md",
+      "crates/ty_python_semantic/src/types/infer.rs"
+     ]
+    },
+    "summary": "6 paths over 90d; top: crates/ty_python_semantic/src/types/infer.rs=100+, crates/ty_python_semantic/resources/mdtest/attributes.md=23, crates/ty_python_semantic/resources/mdtest/protocols.md=23",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 16,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 3",
+    "args": {},
+    "summary": "1 tool call(s): author_history",
+    "input_tokens": 2386,
+    "output_tokens": 35,
+    "latency_ms": 19982,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "author_history",
+    "args": {
+     "author": "AlexWaygood"
+    },
+    "summary": "AlexWaygood: 657 merged, 0 reverted",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 11,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 4",
+    "args": {},
+    "summary": "1 tool call(s): ci_status",
+    "input_tokens": 2886,
+    "output_tokens": 170,
+    "latency_ms": 22388,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "ci_status",
+    "args": {},
+    "summary": "none: 0 check runs",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 5,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 5",
+    "args": {},
+    "summary": "done gathering",
+    "input_tokens": 2963,
+    "output_tokens": 764,
+    "latency_ms": 24425,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "assessment",
+    "args": {},
+    "summary": "3 factor(s), confidence 0.95",
+    "input_tokens": 3613,
+    "output_tokens": 866,
+    "latency_ms": 33971,
+    "error": null
+   }
+  ],
+  "input_tokens": 14349,
+  "output_tokens": 2108,
+  "tool_calls": 4,
+  "cost_usd": 0.003417
+ }
+}

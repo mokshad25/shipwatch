@@ -1,0 +1,178 @@
+{
+ "repo": "pydantic/pydantic",
+ "number": 12314,
+ "label": 0,
+ "model": "groq:openai/gpt-oss-120b",
+ "prompt_version": "v1",
+ "stats": {
+  "additions": 157,
+  "deletions": 118,
+  "changed_files": 6
+ },
+ "verdict": {
+  "repo": "pydantic/pydantic",
+  "pr_number": 12314,
+  "head_sha": "49533ae688d6ed6fa0b63a86364928a1ec931a75",
+  "level": "medium",
+  "score": 33,
+  "reason": null,
+  "assessment": {
+   "factors": [
+    {
+     "kind": "large_diff",
+     "severity": 1,
+     "evidence": "\"changed_files\":6,\"additions\":157,\"deletions\":118\" from get_diff output"
+    },
+    {
+     "kind": "hot_files",
+     "severity": 2,
+     "evidence": "\"pydantic/version.py\":{\"commits\":7...\"pyproject.toml\":{\"commits\":8\" from file_churn output"
+    },
+    {
+     "kind": "config_change",
+     "severity": 2,
+     "evidence": "Version bump lines: \\\"_COMPATIBLE_PYDANTIC_CORE_VERSION = '2.38.0'\\\" -> \\\"'2.40.1'\\\" and \\\"pydantic-core==2.38.0\\\" -> \\\"pydantic-core==2.40.1\\\" in get_diff output"
+    }
+   ],
+   "summary": "The PR updates the pinned pydantic‑core version and adjusts related warning messages and tests. With modest code changes, an experienced author, passing CI, and no risky paths, the deployment risk is low.",
+   "confidence": 0.95
+  },
+  "breakdown": {
+   "config_change": 12,
+   "hot_files": 10,
+   "large_diff": 6,
+   "size_lines": 5,
+   "size_files": 0
+  },
+  "rules": []
+ },
+ "trace": {
+  "repo": "pydantic/pydantic",
+  "pr_number": 12314,
+  "provider": "groq",
+  "model": "openai/gpt-oss-120b",
+  "prompt_version": "v1",
+  "input_cost_per_mtok": 0.15,
+  "output_cost_per_mtok": 0.6,
+  "started_at": "2026-10-27T06:27:02.945364Z",
+  "latency_ms": 104926,
+  "steps": [
+   {
+    "kind": "llm",
+    "name": "turn 1",
+    "args": {},
+    "summary": "1 tool call(s): get_diff",
+    "input_tokens": 504,
+    "output_tokens": 42,
+    "latency_ms": 902,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "get_diff",
+    "args": {},
+    "summary": "6 files +157/-118, truncated",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 2,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 2",
+    "args": {},
+    "summary": "1 tool call(s): file_churn",
+    "input_tokens": 4197,
+    "output_tokens": 117,
+    "latency_ms": 1051,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "file_churn",
+    "args": {
+     "days": 90,
+     "paths": [
+      "pydantic/version.py",
+      "pyproject.toml",
+      "tests/test_computed_fields.py",
+      "tests/test_construction.py",
+      "tests/test_types.py",
+      "uv.lock"
+     ]
+    },
+    "summary": "6 paths over 90d; top: uv.lock=11, pyproject.toml=8, pydantic/version.py=7",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 8,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 3",
+    "args": {},
+    "summary": "1 tool call(s): author_history",
+    "input_tokens": 4414,
+    "output_tokens": 84,
+    "latency_ms": 12066,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "author_history",
+    "args": {
+     "author": "Viicos"
+    },
+    "summary": "Viicos: 363 merged, 0 reverted",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 15,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 4",
+    "args": {},
+    "summary": "1 tool call(s): ci_status",
+    "input_tokens": 4860,
+    "output_tokens": 30,
+    "latency_ms": 6018,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "ci_status",
+    "args": {},
+    "summary": "passing: 64 check runs",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 8,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 5",
+    "args": {},
+    "summary": "done gathering",
+    "input_tokens": 4943,
+    "output_tokens": 718,
+    "latency_ms": 39393,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "assessment",
+    "args": {},
+    "summary": "3 factor(s), confidence 0.95",
+    "input_tokens": 5607,
+    "output_tokens": 662,
+    "latency_ms": 45433,
+    "error": null
+   }
+  ],
+  "input_tokens": 24525,
+  "output_tokens": 1653,
+  "tool_calls": 4,
+  "cost_usd": 0.004671
+ }
+}

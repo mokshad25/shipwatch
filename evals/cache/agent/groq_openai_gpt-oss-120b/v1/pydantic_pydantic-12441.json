@@ -1,0 +1,177 @@
+{
+ "repo": "pydantic/pydantic",
+ "number": 12441,
+ "label": 0,
+ "model": "groq:openai/gpt-oss-120b",
+ "prompt_version": "v1",
+ "stats": {
+  "additions": 1,
+  "deletions": 2,
+  "changed_files": 1
+ },
+ "verdict": {
+  "repo": "pydantic/pydantic",
+  "pr_number": 12441,
+  "head_sha": "4a457b27bc936228c976c22beca8560f3dd0e40b",
+  "level": "low",
+  "score": 11,
+  "reason": null,
+  "assessment": {
+   "factors": [
+    {
+     "kind": "hot_files",
+     "severity": 1,
+     "evidence": "\"pyproject.toml\":{\"commits\":15}"
+    },
+    {
+     "kind": "config_change",
+     "severity": 1,
+     "evidence": "\"filename\":\"pyproject.toml\",\"status\":\"modified\",\"additions\":1,\"deletions\":2"
+    }
+   ],
+   "summary": "The PR only updates metadata in pyproject.toml, removing a reviewer entry. With a tiny change, an actively edited config file, a trusted author, and all CI checks passing, the risk of incident is very low.",
+   "confidence": 0.95
+  },
+  "breakdown": {
+   "config_change": 6,
+   "hot_files": 5,
+   "size_lines": 0,
+   "size_files": 0
+  },
+  "rules": []
+ },
+ "trace": {
+  "repo": "pydantic/pydantic",
+  "pr_number": 12441,
+  "provider": "groq",
+  "model": "openai/gpt-oss-120b",
+  "prompt_version": "v1",
+  "input_cost_per_mtok": 0.15,
+  "output_cost_per_mtok": 0.6,
+  "started_at": "2026-10-27T06:28:47.887040Z",
+  "latency_ms": 77952,
+  "steps": [
+   {
+    "kind": "llm",
+    "name": "turn 1",
+    "args": {},
+    "summary": "1 tool call(s): get_diff",
+    "input_tokens": 504,
+    "output_tokens": 28,
+    "latency_ms": 10782,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "get_diff",
+    "args": {},
+    "summary": "1 files +1/-2, not truncated",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 2,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 2",
+    "args": {},
+    "summary": "1 tool call(s): file_churn",
+    "input_tokens": 860,
+    "output_tokens": 136,
+    "latency_ms": 3744,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "file_churn",
+    "args": {
+     "days": 90,
+     "paths": [
+      "pyproject.toml"
+     ]
+    },
+    "summary": "1 paths over 90d; top: pyproject.toml=15",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 4,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 3",
+    "args": {},
+    "summary": "1 tool call(s): author_history",
+    "input_tokens": 968,
+    "output_tokens": 74,
+    "latency_ms": 8849,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "author_history",
+    "args": {
+     "author": "DouweM"
+    },
+    "summary": "DouweM: 3 merged, 0 reverted",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 6,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 4",
+    "args": {},
+    "summary": "1 tool call(s): ci_status",
+    "input_tokens": 1174,
+    "output_tokens": 94,
+    "latency_ms": 8887,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "ci_status",
+    "args": {},
+    "summary": "passing: 68 check runs",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 11,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 5",
+    "args": {},
+    "summary": "done gathering",
+    "input_tokens": 1258,
+    "output_tokens": 478,
+    "latency_ms": 10862,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "assessment",
+    "args": {},
+    "summary": "",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 16785,
+    "error": "invalid assessment: the provider rejected it (json_validate_failed): Error code: 400 - {'error': {'message': \"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.\", 'type': 'invalid_request_error', 'code': 'json_validate_failed', 'failed_generation': '{\"confidence\":0.95,\"factors\":[{\"kind\":\"hot_files\",\"severity\":1,\"evidence\":\"\\\\\"pyproject.toml\\\\\":{\\\\\"commits\\\\\":15}\"}},{\"kind\":\"config_change\",\"severity\":1,\"evidence\":\"\\\\\"filename\\\\\":\\\\\"pyproject.toml\\\\\",\\\\\"s"
+   },
+   {
+    "kind": "llm",
+    "name": "assessment retry",
+    "args": {},
+    "summary": "2 factor(s), confidence 0.95",
+    "input_tokens": 1887,
+    "output_tokens": 562,
+    "latency_ms": 18010,
+    "error": null
+   }
+  ],
+  "input_tokens": 6651,
+  "output_tokens": 1372,
+  "tool_calls": 4,
+  "cost_usd": 0.001821
+ }
+}

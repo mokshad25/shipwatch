@@ -1,0 +1,178 @@
+{
+ "repo": "astral-sh/uv",
+ "number": 12402,
+ "label": 0,
+ "model": "groq:openai/gpt-oss-20b",
+ "prompt_version": "v1",
+ "stats": {
+  "additions": 2,
+  "deletions": 2,
+  "changed_files": 1
+ },
+ "verdict": {
+  "repo": "astral-sh/uv",
+  "pr_number": 12402,
+  "head_sha": "c62117ef68977069e4dbea108f75f5b0b335b783",
+  "level": "low",
+  "score": 19,
+  "reason": null,
+  "assessment": {
+   "factors": [
+    {
+     "kind": "hot_files",
+     "severity": 1,
+     "evidence": "{\"repo\":\"astral-sh/uv\",\"ref\":\"main\",\"days\":90,\"since\":\"2024-12-23T14:41:46Z\",\"until\":\"2025-03-23T14:41:46Z\",\"files\":{\"docs/guides/integration/pytorch.md\":{\"commits\":7,\"capped\":false}},\"notes\":[]}"
+    },
+    {
+     "kind": "new_author",
+     "severity": 1,
+     "evidence": "{\"repo\":\"astral-sh/uv\",\"author\":\"punkeel\",\"merged_count\":0,\"recent_merged\":[],\"reverted\":[],\"is_new_author\":true,\"notes\":[\"only PRs merged before 2025-03-23T14:41:46Z\"]}"
+    },
+    {
+     "kind": "failing_ci",
+     "severity": 1,
+     "evidence": "{\"repo\":\"astral-sh/uv\",\"sha\":\"c62117ef68977069e4dbea108f75f5b0b335b783\",\"total\":0,\"state\":\"none\",\"counts\":{},\"failing\":[],\"notes\":[]}"
+    }
+   ],
+   "summary": "This PR modifies only a single documentation file with minimal changes, but the author is new and no CI has run yet. Overall risk is low.",
+   "confidence": 0.9
+  },
+  "breakdown": {
+   "failing_ci": 10,
+   "hot_files": 5,
+   "new_author": 4,
+   "size_lines": 0,
+   "size_files": 0
+  },
+  "rules": []
+ },
+ "trace": {
+  "repo": "astral-sh/uv",
+  "pr_number": 12402,
+  "provider": "groq",
+  "model": "openai/gpt-oss-20b",
+  "prompt_version": "v1",
+  "input_cost_per_mtok": 0.075,
+  "output_cost_per_mtok": 0.3,
+  "started_at": "2026-10-26T19:37:31.984510Z",
+  "latency_ms": 15759,
+  "steps": [
+   {
+    "kind": "llm",
+    "name": "turn 1",
+    "args": {},
+    "summary": "1 tool call(s): get_diff",
+    "input_tokens": 503,
+    "output_tokens": 44,
+    "latency_ms": 1801,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "get_diff",
+    "args": {
+     "": "{}"
+    },
+    "summary": "1 files +2/-2, not truncated",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 1,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 2",
+    "args": {},
+    "summary": "1 tool call(s): file_churn",
+    "input_tokens": 843,
+    "output_tokens": 52,
+    "latency_ms": 517,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "file_churn",
+    "args": {
+     "days": 90,
+     "paths": [
+      "docs/guides/integration/pytorch.md"
+     ]
+    },
+    "summary": "1 paths over 90d; top: docs/guides/integration/pytorch.md=7",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 4,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 3",
+    "args": {},
+    "summary": "1 tool call(s): author_history",
+    "input_tokens": 960,
+    "output_tokens": 28,
+    "latency_ms": 2356,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "author_history",
+    "args": {
+     "author": "punkeel"
+    },
+    "summary": "punkeel: 0 merged, 0 reverted",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 14,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 4",
+    "args": {},
+    "summary": "1 tool call(s): ci_status",
+    "input_tokens": 1046,
+    "output_tokens": 100,
+    "latency_ms": 3260,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "ci_status",
+    "args": {
+     "head_sha": "c62117ef68977069e4dbea108f75f5b0b335b783",
+     "repo": "astral-sh/uv"
+    },
+    "summary": "none: 0 check runs",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 1,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 5",
+    "args": {},
+    "summary": "done gathering",
+    "input_tokens": 1158,
+    "output_tokens": 531,
+    "latency_ms": 3282,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "assessment",
+    "args": {},
+    "summary": "3 factor(s), confidence 0.9",
+    "input_tokens": 1618,
+    "output_tokens": 708,
+    "latency_ms": 4471,
+    "error": null
+   }
+  ],
+  "input_tokens": 6128,
+  "output_tokens": 1463,
+  "tool_calls": 4,
+  "cost_usd": 0.000898
+ }
+}

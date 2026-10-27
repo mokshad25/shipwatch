@@ -1,0 +1,8 @@
+{
+  "threshold": "medium",
+  "f1": 0.727,
+  "model": "groq:openai/gpt-oss-120b",
+  "prompt_version": "v1",
+  "dataset": "ci_subset.txt",
+  "created_at": "2026-10-27T06:37:23Z"
+}

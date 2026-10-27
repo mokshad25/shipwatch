@@ -1,0 +1,161 @@
+{
+ "repo": "pydantic/pydantic",
+ "number": 12314,
+ "label": 0,
+ "model": "groq:openai/gpt-oss-20b",
+ "prompt_version": "v1",
+ "stats": {
+  "additions": 157,
+  "deletions": 118,
+  "changed_files": 6
+ },
+ "verdict": {
+  "repo": "pydantic/pydantic",
+  "pr_number": 12314,
+  "head_sha": "49533ae688d6ed6fa0b63a86364928a1ec931a75",
+  "level": "low",
+  "score": 22,
+  "reason": null,
+  "assessment": {
+   "factors": [
+    {
+     "kind": "large_diff",
+     "severity": 1,
+     "evidence": "{\"repo\":\"pydantic/pydantic\",\"pr_number\":12314,\"title\":\"Bump `pydantic-core` to v2.40.1\",\"author\":\"Viicos\",\"head_sha\":\"49533ae688d6ed6fa0b63a86364928a1ec931a75\",\"base_ref\":\"main\",\"created_at\":\"2025-10-02T21:16:40Z\",\"changed_files\":6,\"additions\":157,\"deletions\":118}"
+    },
+    {
+     "kind": "hot_files",
+     "severity": 1,
+     "evidence": "{\"repo\":\"pydantic/pydantic\",\"ref\":\"main\",\"days\":90,\"since\":\"2025-07-04T21:16:40Z\",\"until\":\"2025-10-02T21:16:40Z\",\"files\":{\"pydantic/version.py\":{\"commits\":7,\"capped\":false},\"pyproject.toml\":{\"commits\":8,\"capped\":false},\"tests/test_computed_fields.py\":{\"commits\":0,\"capped\":false},\"tests/test_construction.py\":{\"commits\":0,\"capped\":false},\"tests/test_types.py\":{\"commits\":2,\"capped\":false},\"uv.lock\":{\"commits\":11,\"capped\":false}}}"
+    },
+    {
+     "kind": "config_change",
+     "severity": 1,
+     "evidence": "{\"filename\":\"pydantic/version.py\",\"status\":\"modified\",\"additions\":1,\"deletions\":1,\"patch\":\"@@ -19,7 +19,7 @@\\n \\n # Keep this in sync with the version constraint in the `pyproject.toml` dependencies:\\n-_COMPATIBLE_PYDANTIC_CORE_VERSION = '2.38.0'\\n+_COMPATIBLE_PYDANTIC_CORE_VERSION = '2.40.1'\\n\"}"
+    }
+   ],
+   "summary": "This PR is a simple dependency bump to pydantic-core 2.40.1 with corresponding version constant and test updates. The changes are limited to six files, with no failing CI and minimal churn, indicating low deployment risk.",
+   "confidence": 0.9
+  },
+  "breakdown": {
+   "config_change": 6,
+   "hot_files": 5,
+   "large_diff": 6,
+   "size_lines": 5,
+   "size_files": 0
+  },
+  "rules": []
+ },
+ "trace": {
+  "repo": "pydantic/pydantic",
+  "pr_number": 12314,
+  "provider": "groq",
+  "model": "openai/gpt-oss-20b",
+  "prompt_version": "v1",
+  "input_cost_per_mtok": 0.075,
+  "output_cost_per_mtok": 0.3,
+  "started_at": "2026-10-26T19:37:47.763008Z",
+  "latency_ms": 100598,
+  "steps": [
+   {
+    "kind": "llm",
+    "name": "turn 1",
+    "args": {},
+    "summary": "1 tool call(s): get_diff",
+    "input_tokens": 504,
+    "output_tokens": 33,
+    "latency_ms": 2011,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "get_diff",
+    "args": {
+     "": ""
+    },
+    "summary": "6 files +157/-118, truncated",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 1,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 2",
+    "args": {},
+    "summary": "1 tool call(s): file_churn",
+    "input_tokens": 4200,
+    "output_tokens": 96,
+    "latency_ms": 19060,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "file_churn",
+    "args": {
+     "days": 90,
+     "paths": [
+      "pydantic/version.py",
+      "pyproject.toml",
+      "tests/test_computed_fields.py",
+      "tests/test_construction.py",
+      "tests/test_types.py",
+      "uv.lock"
+     ]
+    },
+    "summary": "6 paths over 90d; top: uv.lock=11, pyproject.toml=8, pydantic/version.py=7",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 8,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 3",
+    "args": {},
+    "summary": "1 tool call(s): ci_status",
+    "input_tokens": 4417,
+    "output_tokens": 58,
+    "latency_ms": 38287,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "ci_status",
+    "args": {
+     "head_sha": "49533ae688d6ed6fa0b63a86364928a1ec931a75",
+     "repo": "pydantic/pydantic"
+    },
+    "summary": "passing: 64 check runs",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 11,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 4",
+    "args": {},
+    "summary": "done gathering",
+    "input_tokens": 4538,
+    "output_tokens": 551,
+    "latency_ms": 29166,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "assessment",
+    "args": {},
+    "summary": "3 factor(s), confidence 0.9",
+    "input_tokens": 4995,
+    "output_tokens": 1710,
+    "latency_ms": 12047,
+    "error": null
+   }
+  ],
+  "input_tokens": 18654,
+  "output_tokens": 2448,
+  "tool_calls": 3,
+  "cost_usd": 0.002133
+ }
+}
