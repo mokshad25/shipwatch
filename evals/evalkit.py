@@ -419,10 +419,16 @@ def check_gate(
     t = baseline["threshold"]
     f1 = report["metrics"]["thresholds"][t]["f1"]
     drop = round((baseline["f1"] - f1) * 100, 1)
-    if report["pending"]:
-        return False, f"**Gate: FAIL** — {len(report['pending'])} PRs didn't run (rate limits?)."
-    verdict = "PASS" if drop <= max_drop_points else "FAIL"
-    return verdict == "PASS", (
-        f"**Gate: {verdict}** — F1 at ≥ {t}: {f1:.2f} vs baseline {baseline['f1']:.2f} "
-        f"({-drop:+.1f} points; fails below −{max_drop_points:g})."
+    comparison = (
+        f"F1 at ≥ {t}: {f1:.2f} vs baseline {baseline['f1']:.2f} "
+        f"({-drop:+.1f} points; fails below −{max_drop_points:g})"
     )
+    if report["pending"]:
+        # Still a fail, but say what the PRs that did run show: a prompt that wrecks F1 shouldn't
+        # read as "just rate limits".
+        return False, (
+            f"**Gate: FAIL** — {len(report['pending'])} PRs didn't run (rate limits?). "
+            f"On the {report['metrics']['scored']} scored: {comparison}."
+        )
+    verdict = "PASS" if drop <= max_drop_points else "FAIL"
+    return verdict == "PASS", f"**Gate: {verdict}** — {comparison}."

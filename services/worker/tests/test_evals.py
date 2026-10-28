@@ -143,7 +143,7 @@ async def test_report_metrics_leave_needs_review_out(
 def _report(f1: float, pending: list[str] | None = None) -> dict:
     return {
         "pending": pending or [],
-        "metrics": {"thresholds": {"medium": {"f1": f1}, "high": {"f1": 0.0}}},
+        "metrics": {"scored": 7, "thresholds": {"medium": {"f1": f1}, "high": {"f1": 0.0}}},
     }
 
 
@@ -154,6 +154,9 @@ def _report(f1: float, pending: list[str] | None = None) -> dict:
         (0.55, None, True, "(-5.0 points; fails below −5)"),
         (0.54, None, False, "**Gate: FAIL** — F1 at ≥ medium: 0.54"),
         (0.90, ["o/r#1"], False, "1 PRs didn't run"),
+        # A partial run still fails, but shows what the PRs that ran say (the W5·D5 demo PR's
+        # F1 fell to 0 while 3 PRs were rate-limited, and the old message only blamed the limits).
+        (0.0, ["o/r#1", "o/r#2", "o/r#3"], False, "On the 7 scored: F1 at ≥ medium: 0.00 vs"),
     ],
 )
 def test_gate(f1, pending, ok, text):
