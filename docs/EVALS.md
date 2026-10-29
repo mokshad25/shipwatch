@@ -199,6 +199,10 @@ Caveats:
   digging in.
 - On Groq's free tier one gate run spends about 150k of the model's ~200k daily tokens and takes
   about 25 minutes, so only one gate run per day fits. A run that hits the cap fails with
-  "N PRs didn't run (rate limits?)"; re-run it once the 24-hour window has moved on.
+  "N PRs didn't run (rate limits?)"; re-run the job once the cap has room again. Reruns resume:
+  the workflow keeps each attempt's results in the Actions cache under the commit it ran on
+  (`--resume eval-results`), so a rerun of the same commit only runs the PRs still pending and
+  needs ~15k tokens per PR rather than a whole day's quota. A new push starts from scratch,
+  since the prompt, weights or agent may have changed.
 - gpt-oss-20b has Groq reject more of its generations than 120b (see above). The agent retries
   those once, but a run can still end with an extra `needs_review` and a slightly different F1.

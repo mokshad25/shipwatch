@@ -70,6 +70,31 @@ async def test_transient_failures_stay_pending_and_stop_the_run(
     assert not list(tmp_path.rglob("*.json"))
 
 
+async def test_a_rerun_only_runs_what_was_pending(github, recorded, fake_llm, llm_reply, tmp_path):
+    # The CI gate's --resume: a run cut short by the daily cap, then a rerun of the same code.
+    rows = [ROW, {"repo": REPO, "number": 3174, "label": 0}]
+    first = await evalkit.run_eval(
+        rows,
+        fake_llm(llm_reply.text("ok"), llm_reply.text(GOOD), _rate_limit()),
+        github,
+        _settings(),
+        cache_root=tmp_path,
+        concurrency=1,
+    )
+    rerun = await evalkit.run_eval(
+        rows,
+        fake_llm(llm_reply.text("ok"), llm_reply.text(GOOD)),  # enough for one PR only
+        github,
+        _settings(),
+        cache_root=tmp_path,
+        concurrency=1,
+    )
+
+    assert (first.fresh, first.pending) == (2, [f"{REPO}#3174"])
+    assert (rerun.fresh, rerun.pending) == (1, [])
+    assert [r.number for r in rerun.records] == [3783, 3174]
+
+
 def _jsonl(path, rows):
     path.write_text("".join(json.dumps(r) + "\n" for r in rows))
     return path

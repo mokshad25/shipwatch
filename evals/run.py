@@ -44,8 +44,10 @@ async def _main(args: argparse.Namespace) -> int:
             llm,
             gh,
             settings,
-            cache_root=args.cache,
-            use_cache=not args.no_cache,
+            # --resume keeps this run's results apart from evals/cache, so a rerun of the same
+            # code only spends tokens on what's still pending.
+            cache_root=args.resume or args.cache,
+            use_cache=args.resume is not None or not args.no_cache,
             concurrency=args.concurrency,
         )
     # Responses the GitHub cache didn't have yet: 0 means only the LLM was live.
@@ -109,6 +111,11 @@ def main() -> None:
     )
     parser.add_argument("--no-cache", action="store_true", help="ignore cached agent results")
     parser.add_argument("--cache", type=Path, default=evalkit.CACHE)
+    parser.add_argument(
+        "--resume",
+        type=Path,
+        help="read and write agent results here instead of the cache (the CI gate's reruns)",
+    )
     parser.add_argument("--out", type=Path, default=evalkit.REPORTS)
     parser.add_argument("--baseline", type=Path, help="gate against this baseline.json")
     parser.add_argument("--max-f1-drop", type=float, default=5.0, help="points (0–100)")

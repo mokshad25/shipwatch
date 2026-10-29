@@ -42,6 +42,15 @@ jobs:
             echo "::error::Add a GROQ_API_KEY repository secret (Settings > Secrets > Actions)."
             exit 1
           fi
+      # Results of earlier attempts on this exact code (github.sha: same merge commit, so same
+      # prompt, weights and agent): a rerun after the daily token cap resets only runs the PRs
+      # that are still pending instead of spending a whole day's quota again.
+      - name: restore partial results
+        uses: actions/cache/restore@v4
+        with:
+          path: eval-results
+          key: eval-results-${{ github.sha }}
+          restore-keys: eval-results-${{ github.sha }}-
       - name: eval (10-PR subset vs baseline)
         id: eval
         continue-on-error: true
@@ -49,9 +58,16 @@ jobs:
           uv run python evals/run.py \
             --model "$(jq -r .model evals/baseline.json)" \
             --subset evals/data/ci_subset.txt \
-            --no-cache --concurrency 1 \
+            --no-cache --resume eval-results --concurrency 1 \
             --baseline evals/baseline.json --max-f1-drop 5 \
             --out eval-report --markdown-out eval-comment.md
+      - name: save partial results
+        if: always() && hashFiles('eval-results/**') != ''
+        uses: actions/cache/save@v4
+        with:
+          path: eval-results
+          # Cache entries can't be overwritten: one per attempt, the restore picks the newest.
+          key: eval-results-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
       - name: comment the metrics on the PR
         if: always() && hashFiles('eval-comment.md') != ''
         env:
