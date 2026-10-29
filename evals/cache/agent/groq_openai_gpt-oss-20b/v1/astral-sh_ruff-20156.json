@@ -1,0 +1,179 @@
+{
+ "repo": "astral-sh/ruff",
+ "number": 20156,
+ "label": 1,
+ "model": "groq:openai/gpt-oss-20b",
+ "prompt_version": "v1",
+ "stats": {
+  "additions": 15,
+  "deletions": 15,
+  "changed_files": 6
+ },
+ "verdict": {
+  "repo": "astral-sh/ruff",
+  "pr_number": 20156,
+  "head_sha": "cf4a1d53300256e22f687eab2317eb3ee4a3cb26",
+  "level": "medium",
+  "score": 25,
+  "reason": null,
+  "assessment": {
+   "factors": [
+    {
+     "kind": "hot_files",
+     "severity": 1,
+     "evidence": "file_churn output: {\"repo\":\"astral-sh/ruff\",\"ref\":\"main\",\"days\":90,\"since\":\"2025-05-31T17:16:45Z\",\"until\":\"2025-08-29T17:16:45Z\",\"files\":{\"crates/ty_python_semantic/src/types/infer.rs\":{\"commits\":100,\"capped\":true}}}"
+    },
+    {
+     "kind": "failing_ci",
+     "severity": 2,
+     "evidence": "ci_status output: {\"repo\":\"astral-sh/ruff\",\"sha\":\"cf4a1d53300256e22f687eab2317eb3ee4a3cb26\",\"total\":0,\"state\":\"none\",\"counts\":{},\"failing\":[],\"notes\":[]}"
+    }
+   ],
+   "summary": "The PR updates an error code across documentation and the inference engine, affecting a hot file but only a few lines. No CI runs are present yet, so the change hasn't been validated automatically, though the author has a strong track record.",
+   "confidence": 0.85
+  },
+  "breakdown": {
+   "failing_ci": 20,
+   "hot_files": 5,
+   "size_lines": 0,
+   "size_files": 0
+  },
+  "rules": []
+ },
+ "trace": {
+  "repo": "astral-sh/ruff",
+  "pr_number": 20156,
+  "provider": "groq",
+  "model": "openai/gpt-oss-20b",
+  "prompt_version": "v1",
+  "input_cost_per_mtok": 0.075,
+  "output_cost_per_mtok": 0.3,
+  "started_at": "2026-10-27T13:34:19.724715Z",
+  "latency_ms": 59966,
+  "steps": [
+   {
+    "kind": "llm",
+    "name": "turn 1",
+    "args": {},
+    "summary": "1 tool call(s): get_diff",
+    "input_tokens": 503,
+    "output_tokens": 52,
+    "latency_ms": 1578,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "get_diff",
+    "args": {
+     "author": "lambdalisue",
+     "head_sha": "abc123",
+     "title": "Add support for mypy 1.1"
+    },
+    "summary": "6 files +15/-15, not truncated",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 2,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 2",
+    "args": {},
+    "summary": "1 tool call(s): file_churn",
+    "input_tokens": 2029,
+    "output_tokens": 164,
+    "latency_ms": 955,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "file_churn",
+    "args": {
+     "days": 90,
+     "paths": [
+      "crates/ty_python_semantic/resources/mdtest/attributes.md",
+      "crates/ty_python_semantic/resources/mdtest/diagnostics/attribute_assignment.md",
+      "crates/ty_python_semantic/resources/mdtest/protocols.md",
+      "crates/ty_python_semantic/resources/mdtest/snapshots/attribute_assignment…_-_Attribute_assignment_-_`ClassVar`s_(8d7cca27987b099d).snap",
+      "crates/ty_python_semantic/resources/mdtest/type_qualifiers/classvar.md",
+      "crates/ty_python_semantic/src/types/infer.rs"
+     ]
+    },
+    "summary": "6 paths over 90d; top: crates/ty_python_semantic/src/types/infer.rs=100+, crates/ty_python_semantic/resources/mdtest/attributes.md=23, crates/ty_python_semantic/resources/mdtest/protocols.md=23",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 11,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 3",
+    "args": {},
+    "summary": "1 tool call(s): author_history",
+    "input_tokens": 2417,
+    "output_tokens": 125,
+    "latency_ms": 601,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "author_history",
+    "args": {
+     "author": "AlexWaygood"
+    },
+    "summary": "AlexWaygood: 657 merged, 0 reverted",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 6,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 4",
+    "args": {},
+    "summary": "1 tool call(s): ci_status",
+    "input_tokens": 2917,
+    "output_tokens": 58,
+    "latency_ms": 1448,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "ci_status",
+    "args": {
+     "ref": "cf4a1d53300256e22f687eab2317eb3ee4a3cb26",
+     "repo": "astral-sh/ruff"
+    },
+    "summary": "none: 0 check runs",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 2,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 5",
+    "args": {},
+    "summary": "done gathering",
+    "input_tokens": 3032,
+    "output_tokens": 806,
+    "latency_ms": 24768,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "assessment",
+    "args": {},
+    "summary": "2 factor(s), confidence 0.85",
+    "input_tokens": 3457,
+    "output_tokens": 1185,
+    "latency_ms": 30568,
+    "error": null
+   }
+  ],
+  "input_tokens": 14355,
+  "output_tokens": 2390,
+  "tool_calls": 4,
+  "cost_usd": 0.001794
+ }
+}

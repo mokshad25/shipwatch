@@ -170,8 +170,8 @@ free tier and would be scored on a paid tier.
 `weights.yaml` and the agent), the eval code or its data:
 
 - Runs the agent live on the fixed 10-PR subset in `evals/data/ci_subset.txt` (5 risky and 5
-  clean, across all three repos), using the model named in `evals/baseline.json` and the
-  worker's default `PROMPT_VERSION`.
+  clean, across all three repos), using the model named in `evals/baseline.json` (now
+  `groq:openai/gpt-oss-20b`, see below) and the worker's default `PROMPT_VERSION`.
 - GitHub comes from the committed response cache, so only the LLM is live (key: the
   `GROQ_API_KEY` repo secret).
 - Fails if F1 at the baseline's threshold drops more than 5 points below `evals/baseline.json`,
@@ -182,12 +182,23 @@ Rebuild the baseline after an intended change has landed:
 
 ```
 uv run python evals/run.py --subset evals/data/ci_subset.txt --threshold medium \
-    --write-baseline evals/baseline.json
+    --model groq:openai/gpt-oss-20b --write-baseline evals/baseline.json
 ```
+
+**Why the gate runs on gpt-oss-20b.** The first baseline used gpt-oss-120b. On Groq's free tier
+each model has its own daily cap of about 200k tokens, and one gate run uses about 150k, so two
+gate runs in a day can't both finish. The demo PR (#2) used the 120b cap, and the W5 PR's own
+gate (#3) then got HTTP 429 on every PR and failed without scoring any. On the CI subset,
+gpt-oss-20b scores the same as 120b did (F1 0.727 at ≥ medium: 4 TP, 2 FP, 1 FN, 2 TN, and
+ruff#18206 `needs_review` on both) at half the price per token, and its cap is separate from the
+120b eval runs. The 120b baseline is in git history (`e857b00`).
 
 Caveats:
 - 10 PRs is coarse. One flipped prediction moves F1 by roughly 10 points, and the LLM isn't
   deterministic, so an unchanged prompt can occasionally fail the gate. Re-run the job before
   digging in.
-- On Groq's free tier one gate run spends about 150k of the 200k daily tokens and takes about
-  25 minutes.
+- On Groq's free tier one gate run spends about 150k of the model's ~200k daily tokens and takes
+  about 25 minutes, so only one gate run per day fits. A run that hits the cap fails with
+  "N PRs didn't run (rate limits?)"; re-run it once the 24-hour window has moved on.
+- gpt-oss-20b has Groq reject more of its generations than 120b (see above). The agent retries
+  those once, but a run can still end with an extra `needs_review` and a slightly different F1.

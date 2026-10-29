@@ -1,0 +1,186 @@
+{
+ "repo": "astral-sh/ruff",
+ "number": 19802,
+ "label": 0,
+ "model": "groq:openai/gpt-oss-20b",
+ "prompt_version": "v1",
+ "stats": {
+  "additions": 61,
+  "deletions": 20,
+  "changed_files": 2
+ },
+ "verdict": {
+  "repo": "astral-sh/ruff",
+  "pr_number": 19802,
+  "head_sha": "967f90b271d52e7be3a4248922428123a6e725e2",
+  "level": "high",
+  "score": 62,
+  "reason": null,
+  "assessment": {
+   "factors": [
+    {
+     "kind": "large_diff",
+     "severity": 2,
+     "evidence": "get_diff shows 2 files changed, 61 additions, 20 deletions."
+    },
+    {
+     "kind": "hot_files",
+     "severity": 2,
+     "evidence": "file_churn shows crates/ty_python_semantic/src/types/infer.rs has 100 commits in the past 90 days (capped)."
+    },
+    {
+     "kind": "failing_ci",
+     "severity": 3,
+     "evidence": "ci_status shows total 0, state none."
+    },
+    {
+     "kind": "missing_tests",
+     "severity": 2,
+     "evidence": "get_diff shows only two files changed, no test files."
+    }
+   ],
+   "summary": "This PR modifies type inference logic in a highly churned file and introduces a new helper that may affect eager scope resolution. No CI has run yet and no tests were added, increasing the risk of regressions. Review and run full CI before merging.",
+   "confidence": 0.7
+  },
+  "breakdown": {
+   "failing_ci": 30,
+   "hot_files": 10,
+   "large_diff": 12,
+   "missing_tests": 10,
+   "size_lines": 0,
+   "size_files": 0
+  },
+  "rules": [
+   "serious_failing_ci"
+  ]
+ },
+ "trace": {
+  "repo": "astral-sh/ruff",
+  "pr_number": 19802,
+  "provider": "groq",
+  "model": "openai/gpt-oss-20b",
+  "prompt_version": "v1",
+  "input_cost_per_mtok": 0.075,
+  "output_cost_per_mtok": 0.3,
+  "started_at": "2026-10-27T15:33:48.148328Z",
+  "latency_ms": 58178,
+  "steps": [
+   {
+    "kind": "llm",
+    "name": "turn 1",
+    "args": {},
+    "summary": "1 tool call(s): get_diff",
+    "input_tokens": 503,
+    "output_tokens": 33,
+    "latency_ms": 610,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "get_diff",
+    "args": {
+     "": "{}"
+    },
+    "summary": "2 files +61/-20, not truncated",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 1,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 2",
+    "args": {},
+    "summary": "1 tool call(s): file_churn",
+    "input_tokens": 1716,
+    "output_tokens": 68,
+    "latency_ms": 784,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "file_churn",
+    "args": {
+     "days": 90,
+     "paths": [
+      "crates/ty_python_semantic/resources/mdtest/narrow/conditionals/nested.md",
+      "crates/ty_python_semantic/src/types/infer.rs"
+     ]
+    },
+    "summary": "2 paths over 90d; top: crates/ty_python_semantic/src/types/infer.rs=100+, crates/ty_python_semantic/resources/mdtest/narrow/conditionals/nested.md=6",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 33,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 3",
+    "args": {},
+    "summary": "1 tool call(s): author_history",
+    "input_tokens": 1888,
+    "output_tokens": 105,
+    "latency_ms": 881,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "author_history",
+    "args": {
+     "author": "mtshiba"
+    },
+    "summary": "mtshiba: 18 merged, 0 reverted",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 7,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 4",
+    "args": {},
+    "summary": "1 tool call(s): ci_status",
+    "input_tokens": 2334,
+    "output_tokens": 18,
+    "latency_ms": 9349,
+    "error": "provider rejected the generation (tool_use_failed); retried"
+   },
+   {
+    "kind": "tool",
+    "name": "ci_status",
+    "args": {
+     "repo": "astral-sh/??"
+    },
+    "summary": "none: 0 check runs",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 4,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 5",
+    "args": {},
+    "summary": "done gathering",
+    "input_tokens": 2419,
+    "output_tokens": 618,
+    "latency_ms": 18340,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "assessment",
+    "args": {},
+    "summary": "4 factor(s), confidence 0.7",
+    "input_tokens": 2787,
+    "output_tokens": 1339,
+    "latency_ms": 28147,
+    "error": null
+   }
+  ],
+  "input_tokens": 11647,
+  "output_tokens": 2181,
+  "tool_calls": 4,
+  "cost_usd": 0.001528
+ }
+}

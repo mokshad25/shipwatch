@@ -1,0 +1,168 @@
+{
+ "repo": "pydantic/pydantic",
+ "number": 12699,
+ "label": 1,
+ "model": "groq:openai/gpt-oss-20b",
+ "prompt_version": "v1",
+ "stats": {
+  "additions": 1,
+  "deletions": 1,
+  "changed_files": 1
+ },
+ "verdict": {
+  "repo": "pydantic/pydantic",
+  "pr_number": 12699,
+  "head_sha": "fd824478742f373fcc8789e4a7b3a6386ae44919",
+  "level": "low",
+  "score": 20,
+  "reason": null,
+  "assessment": {
+   "factors": [
+    {
+     "kind": "failing_ci",
+     "severity": 2,
+     "evidence": "\\\"state\\\":\\\"failing\\\",\\\"counts\\\":{\\\"success\\\":49,\\\"skipped\\\":19,\\\"failure\\\":1},\\\"failing\\\":[\\\"CodSpeed Performance Analysis\\\"]"
+    }
+   ],
+   "summary": "The PR changes a single line in a documentation file and only one CI check fails, which is a performance analysis unrelated to application logic. Overall, the risk of a production incident is negligible.",
+   "confidence": 1.0
+  },
+  "breakdown": {
+   "failing_ci": 20,
+   "size_lines": 0,
+   "size_files": 0
+  },
+  "rules": []
+ },
+ "trace": {
+  "repo": "pydantic/pydantic",
+  "pr_number": 12699,
+  "provider": "groq",
+  "model": "openai/gpt-oss-20b",
+  "prompt_version": "v1",
+  "input_cost_per_mtok": 0.075,
+  "output_cost_per_mtok": 0.3,
+  "started_at": "2026-10-28T05:52:02.951047Z",
+  "latency_ms": 17450,
+  "steps": [
+   {
+    "kind": "llm",
+    "name": "turn 1",
+    "args": {},
+    "summary": "1 tool call(s): get_diff",
+    "input_tokens": 504,
+    "output_tokens": 73,
+    "latency_ms": 299,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "get_diff",
+    "args": {
+     "author": "michaelc",
+     "head_sha": "abcdef123456",
+     "title": "Add type: Union[Literal[True], Literal[False]]"
+    },
+    "summary": "1 files +1/-1, not truncated",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 2,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 2",
+    "args": {},
+    "summary": "1 tool call(s): file_churn",
+    "input_tokens": 875,
+    "output_tokens": 103,
+    "latency_ms": 614,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "file_churn",
+    "args": {
+     "days": 90,
+     "paths": [
+      "docs/concepts/experimental.md"
+     ]
+    },
+    "summary": "1 paths over 90d; top: docs/concepts/experimental.md=0",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 1,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 3",
+    "args": {},
+    "summary": "1 tool call(s): author_history",
+    "input_tokens": 987,
+    "output_tokens": 682,
+    "latency_ms": 1776,
+    "error": "provider rejected the generation (output_parse_failed); retried"
+   },
+   {
+    "kind": "tool",
+    "name": "author_history",
+    "args": {
+     "author": "Viicos"
+    },
+    "summary": "Viicos: 442 merged, 0 reverted",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 2959,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 4",
+    "args": {},
+    "summary": "1 tool call(s): ci_status",
+    "input_tokens": 1442,
+    "output_tokens": 148,
+    "latency_ms": 667,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "ci_status",
+    "args": {
+     "repo": "pydantic/pydantic",
+     "sha": "fd824478742f373fcc8789e4a7b3a6386ae44919"
+    },
+    "summary": "failing: 69 check runs (CodSpeed Performance Analysis)",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 823,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 5",
+    "args": {},
+    "summary": "done gathering",
+    "input_tokens": 1570,
+    "output_tokens": 429,
+    "latency_ms": 813,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "assessment",
+    "args": {},
+    "summary": "1 factor(s), confidence 1.0",
+    "input_tokens": 1888,
+    "output_tokens": 943,
+    "latency_ms": 9490,
+    "error": null
+   }
+  ],
+  "input_tokens": 7266,
+  "output_tokens": 2378,
+  "tool_calls": 4,
+  "cost_usd": 0.001258
+ }
+}
