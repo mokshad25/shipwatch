@@ -95,6 +95,19 @@ async def test_a_rerun_only_runs_what_was_pending(github, recorded, fake_llm, ll
     assert [r.number for r in rerun.records] == [3783, 3174]
 
 
+def test_resume_results_are_kept_only_while_prs_are_pending(tmp_path):
+    results = tmp_path / "eval-results"
+    cached = evalkit.agent_cache_path(results, "groq:fake", "v1", REPO, 3783)
+    cached.parent.mkdir(parents=True)
+    cached.write_text("{}")
+
+    evalkit.finish_resume(results, [f"{REPO}#3174"])
+    assert cached.is_file()
+
+    evalkit.finish_resume(results, [])  # complete: a rerun must sample the LLM again
+    assert [p.name for p in results.rglob("*")] == ["COMPLETE"]
+
+
 def _jsonl(path, rows):
     path.write_text("".join(json.dumps(r) + "\n" for r in rows))
     return path

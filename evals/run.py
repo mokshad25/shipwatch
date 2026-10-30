@@ -50,6 +50,8 @@ async def _main(args: argparse.Namespace) -> int:
             use_cache=args.resume is not None or not args.no_cache,
             concurrency=args.concurrency,
         )
+    if args.resume:
+        evalkit.finish_resume(args.resume, result.pending)
     # Responses the GitHub cache didn't have yet: 0 means only the LLM was live.
     recorded = _count(args.cache / "github") - recorded_before
     dataset = str(args.subset or args.dataset)

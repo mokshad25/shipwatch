@@ -12,6 +12,7 @@ import asyncio
 import json
 import math
 import re
+import shutil
 from collections.abc import Iterable
 from datetime import UTC, datetime
 from pathlib import Path
@@ -229,6 +230,17 @@ async def run_eval(
     order = [f"{r['repo']}#{r['number']}" for r in rows]
     records = [results[k] for k in order if k in results]
     return RunResult(records=records, fresh=fresh, pending=[k for k in order if k in pending])
+
+
+def finish_resume(directory: Path, pending: list[str]) -> None:
+    """After a --resume run: keep the results while PRs are pending, so the next attempt finishes
+    them; once nothing is, empty the directory (a marker file keeps it saveable), so a rerun of a
+    complete run samples the LLM afresh instead of replaying the same verdicts."""
+    if pending:
+        return
+    shutil.rmtree(directory, ignore_errors=True)
+    directory.mkdir(parents=True)
+    (directory / "COMPLETE").write_text("last run finished; nothing to resume\n")
 
 
 def load_cached(
