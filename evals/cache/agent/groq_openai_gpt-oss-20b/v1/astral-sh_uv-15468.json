@@ -1,0 +1,151 @@
+{
+ "repo": "astral-sh/uv",
+ "number": 15468,
+ "label": 0,
+ "model": "groq:openai/gpt-oss-20b",
+ "prompt_version": "v1",
+ "stats": {
+  "additions": 53,
+  "deletions": 106,
+  "changed_files": 1
+ },
+ "verdict": {
+  "repo": "astral-sh/uv",
+  "pr_number": 15468,
+  "head_sha": "ad7305804ebc84318c56c8186fa8f99ee49d6d03",
+  "level": "medium",
+  "score": 25,
+  "reason": null,
+  "assessment": {
+   "factors": [
+    {
+     "kind": "failing_ci",
+     "severity": 2,
+     "evidence": "{\\\"repo\\\":\\\"astral-sh/uv\\\",\\\"sha\\\":\\\"ad7305804ebc84318c56c8186fa8f99ee49d6d03\\\",\\\"total\\\":0,\\\"state\\\":\\\"none\\\",\\\"counts\\\":{},\\\"failing\\\":[],\\\"notes\\\":[]}"
+    },
+    {
+     "kind": "hot_files",
+     "severity": 1,
+     "evidence": "{\\\"repo\\\":\\\"astral-sh/uv\\\",\\\"ref\\\":\\\"main\\\",\\\"days\\\":90,\\\"since\\\":\\\"2025-05-25T09:57:04Z\\\",\\\"until\\\":\\\"2025-08-23T09:57:04Z\\\",\\\"files\\\":{\\\"crates/uv/tests/it/format.rs\\\":{\\\"commits\\\":3,\\\"capped\\\":false}},\\\"notes\\\":[]}"
+    }
+   ],
+   "summary": "This pull request modifies a single test file with moderate churn and no CI checks are running. The lack of CI coverage is a notable risk, while the file’s recent activity suggests a minor hot‑spot concern. Overall, the impact on production is low, but the merge should be followed by a manual test run to avoid future CI failures.",
+   "confidence": 0.8
+  },
+  "breakdown": {
+   "failing_ci": 20,
+   "hot_files": 5,
+   "size_lines": 0,
+   "size_files": 0
+  },
+  "rules": []
+ },
+ "trace": {
+  "repo": "astral-sh/uv",
+  "pr_number": 15468,
+  "provider": "groq",
+  "model": "openai/gpt-oss-20b",
+  "prompt_version": "v1",
+  "input_cost_per_mtok": 0.075,
+  "output_cost_per_mtok": 0.3,
+  "started_at": "2026-10-26T09:18:47.823678Z",
+  "latency_ms": 85980,
+  "steps": [
+   {
+    "kind": "llm",
+    "name": "turn 1",
+    "args": {},
+    "summary": "1 tool call(s): get_diff",
+    "input_tokens": 503,
+    "output_tokens": 30,
+    "latency_ms": 8626,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "get_diff",
+    "args": {
+     "": ""
+    },
+    "summary": "1 files +53/-106, truncated",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 2,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 2",
+    "args": {},
+    "summary": "1 tool call(s): file_churn",
+    "input_tokens": 2055,
+    "output_tokens": 145,
+    "latency_ms": 15593,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "file_churn",
+    "args": {
+     "days": 90,
+     "paths": [
+      "crates/uv/tests/it/format.rs"
+     ],
+     "repo": "astral-sh/uv"
+    },
+    "summary": "1 paths over 90d; top: crates/uv/tests/it/format.rs=3",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 2,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 3",
+    "args": {},
+    "summary": "1 tool call(s): ci_status",
+    "input_tokens": 2183,
+    "output_tokens": 115,
+    "latency_ms": 17898,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "ci_status",
+    "args": {
+     "repo": "astral-sh/uv",
+     "sha": "ad7305804ebc84318c56c8186fa8f99ee49d6d03"
+    },
+    "summary": "none: 0 check runs",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 2,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 4",
+    "args": {},
+    "summary": "done gathering",
+    "input_tokens": 2296,
+    "output_tokens": 586,
+    "latency_ms": 16198,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "assessment",
+    "args": {},
+    "summary": "2 factor(s), confidence 0.8",
+    "input_tokens": 2849,
+    "output_tokens": 880,
+    "latency_ms": 27643,
+    "error": null
+   }
+  ],
+  "input_tokens": 9886,
+  "output_tokens": 1756,
+  "tool_calls": 3,
+  "cost_usd": 0.001268
+ }
+}

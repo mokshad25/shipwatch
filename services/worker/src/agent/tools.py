@@ -5,6 +5,7 @@ says so, so a partial view is never mistaken for the whole picture.
 """
 
 import re
+from collections.abc import Container, Mapping
 from datetime import UTC, datetime, timedelta
 from typing import Literal
 
@@ -184,34 +185,52 @@ class AuthorHistory(BaseModel):
 _REVERT_TITLE = re.compile(r'^Revert "(?P<title>.+?)(?: \(#(?P<number>\d+)\))?"$')
 
 
-async def author_history(gh: GitHubClient, repo: str, author: str) -> AuthorHistory:
-    """How many PRs the author has merged here, and which of them were later reverted."""
+def revert_target(
+    repo: str, revert: dict, known: Container[int], by_title: Mapping[str, int]
+) -> int | None:
+    """Which of the `known` PRs (numbers, plus their titles in `by_title`) `revert` reverts.
+
+    GitHub's revert button writes `Reverts owner/repo#N` in the body; hand-made reverts use the
+    title `Revert "<title>"`, maybe ending in `(#N)` after a squash merge.
+    """
+    body_ref = re.compile(rf"\bReverts {re.escape(repo)}#(\d+)\b", re.IGNORECASE)
+    target = None
+    if (m := body_ref.search(revert.get("body") or "")) and int(m[1]) in known:
+        target = int(m[1])
+    elif m := _REVERT_TITLE.match(revert["title"]):
+        if m["number"] and int(m["number"]) in known:
+            target = int(m["number"])
+        else:
+            target = by_title.get(m["title"])
+    return None if target == revert["number"] else target
+
+
+async def author_history(
+    gh: GitHubClient, repo: str, author: str, before: datetime | None = None
+) -> AuthorHistory:
+    """How many PRs the author has merged here, and which of them were later reverted.
+
+    `before` limits both to PRs merged before then: evals pass the PR's opening time, so a PR
+    reviewed after the fact can't see its own revert (docs/EVALS.md, leakage).
+    """
     search = {"sort": "created", "order": "desc", "per_page": 100}
+    cutoff = f" merged:<{before.strftime('%Y-%m-%dT%H:%M:%SZ')}" if before else ""
     merged = await gh.get_json(
-        "/search/issues", {**search, "q": f"repo:{repo} is:pr is:merged author:{author}"}
+        "/search/issues", {**search, "q": f"repo:{repo} is:pr is:merged author:{author}{cutoff}"}
     )
     reverts = await gh.get_json(
-        "/search/issues", {**search, "q": f"repo:{repo} is:pr is:merged in:title Revert"}
+        "/search/issues", {**search, "q": f"repo:{repo} is:pr is:merged in:title Revert{cutoff}"}
     )
     mine = merged["items"]
-    by_number = {pr["number"]: pr for pr in mine}
+    by_number = {pr["number"] for pr in mine}
     by_title = {pr["title"]: pr["number"] for pr in mine}
-    body_ref = re.compile(rf"\bReverts {re.escape(repo)}#(\d+)\b", re.IGNORECASE)
 
     reverted: list[Revert] = []
     for rv in reverts["items"]:
-        target = None
-        if (m := body_ref.search(rv.get("body") or "")) and int(m[1]) in by_number:
-            target = int(m[1])
-        elif m := _REVERT_TITLE.match(rv["title"]):
-            if m["number"] and int(m["number"]) in by_number:
-                target = int(m["number"])
-            else:
-                target = by_title.get(m["title"])
-        if target is not None and target != rv["number"]:
+        if (target := revert_target(repo, rv, by_number, by_title)) is not None:
             reverted.append(Revert(pr=target, revert_pr=rv["number"]))
 
-    notes: list[str] = []
+    notes: list[str] = [f"only PRs merged before {cutoff.split('<')[1]}"] if before else []
     if merged["total_count"] > len(mine):
         notes.append(f"reverts checked against the newest {len(mine)} merged PRs only")
     return AuthorHistory(

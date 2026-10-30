@@ -1,0 +1,173 @@
+{
+ "repo": "astral-sh/ruff",
+ "number": 17688,
+ "label": 0,
+ "model": "groq:openai/gpt-oss-120b",
+ "prompt_version": "v1",
+ "stats": {
+  "additions": 0,
+  "deletions": 4,
+  "changed_files": 1
+ },
+ "verdict": {
+  "repo": "astral-sh/ruff",
+  "pr_number": 17688,
+  "head_sha": "3a1f9c3888c385646275bd885d6383fd5ff8b1db",
+  "level": "low",
+  "score": 21,
+  "reason": null,
+  "assessment": {
+   "factors": [
+    {
+     "kind": "hot_files",
+     "severity": 1,
+     "evidence": "\"files\":{\"Cargo.toml\":{\"commits\":32,\"capped\":false}}"
+    },
+    {
+     "kind": "config_change",
+     "severity": 1,
+     "evidence": "\"patch\":\"@@ -231,10 +231,6 ... -too_many_arguments = \\\"allow\\\" ...\""
+    },
+    {
+     "kind": "failing_ci",
+     "severity": 1,
+     "evidence": "\"total\":0,\"state\":\"none\""
+    }
+   ],
+   "summary": "The PR only removes a lint-allow entry in Cargo.toml, affecting a moderately active configuration file. No CI checks ran, but the change is minor and unlikely to cause runtime issues.",
+   "confidence": 0.95
+  },
+  "breakdown": {
+   "config_change": 6,
+   "failing_ci": 10,
+   "hot_files": 5,
+   "size_lines": 0,
+   "size_files": 0
+  },
+  "rules": []
+ },
+ "trace": {
+  "repo": "astral-sh/ruff",
+  "pr_number": 17688,
+  "provider": "groq",
+  "model": "openai/gpt-oss-120b",
+  "prompt_version": "v1",
+  "input_cost_per_mtok": 0.15,
+  "output_cost_per_mtok": 0.6,
+  "started_at": "2026-10-26T09:03:33.275537Z",
+  "latency_ms": 38461,
+  "steps": [
+   {
+    "kind": "llm",
+    "name": "turn 1",
+    "args": {},
+    "summary": "1 tool call(s): get_diff",
+    "input_tokens": 503,
+    "output_tokens": 41,
+    "latency_ms": 456,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "get_diff",
+    "args": {},
+    "summary": "1 files +0/-4, not truncated",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 1,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 2",
+    "args": {},
+    "summary": "1 tool call(s): file_churn",
+    "input_tokens": 807,
+    "output_tokens": 89,
+    "latency_ms": 656,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "file_churn",
+    "args": {
+     "days": 90,
+     "paths": [
+      "Cargo.toml"
+     ]
+    },
+    "summary": "1 paths over 90d; top: Cargo.toml=32",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 735,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 3",
+    "args": {},
+    "summary": "1 tool call(s): ci_status",
+    "input_tokens": 912,
+    "output_tokens": 85,
+    "latency_ms": 483,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "ci_status",
+    "args": {},
+    "summary": "none: 0 check runs",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 453,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 4",
+    "args": {},
+    "summary": "1 tool call(s): author_history",
+    "input_tokens": 989,
+    "output_tokens": 79,
+    "latency_ms": 5653,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "author_history",
+    "args": {
+     "author": "sharkdp"
+    },
+    "summary": "sharkdp: 216 merged, 0 reverted",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 2769,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 5",
+    "args": {},
+    "summary": "done gathering",
+    "input_tokens": 1484,
+    "output_tokens": 596,
+    "latency_ms": 7219,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "assessment",
+    "args": {},
+    "summary": "3 factor(s), confidence 0.95",
+    "input_tokens": 2035,
+    "output_tokens": 617,
+    "latency_ms": 20015,
+    "error": null
+   }
+  ],
+  "input_tokens": 6730,
+  "output_tokens": 1507,
+  "tool_calls": 4,
+  "cost_usd": 0.001914
+ }
+}

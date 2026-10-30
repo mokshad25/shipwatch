@@ -1,0 +1,70 @@
+{
+ "repo": "astral-sh/ruff",
+ "number": 18206,
+ "label": 0,
+ "model": "groq:openai/gpt-oss-120b",
+ "prompt_version": "v1",
+ "stats": {
+  "additions": 277,
+  "deletions": 366,
+  "changed_files": 27
+ },
+ "verdict": {
+  "repo": "astral-sh/ruff",
+  "pr_number": 18206,
+  "head_sha": "d154c2ccd6cf7421086690f6cf5e591a0fe2ff2e",
+  "level": "needs_review",
+  "score": null,
+  "reason": "unexpected error: APIStatusError: Error code: 413 - {'error': {'message': 'Request too large for model `openai/gpt-oss-120b` in organization `org_01m100c2ckeknrr2djs6cev8yf` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Requested 8059, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+  "assessment": null,
+  "breakdown": {},
+  "rules": []
+ },
+ "trace": {
+  "repo": "astral-sh/ruff",
+  "pr_number": 18206,
+  "provider": "groq",
+  "model": "openai/gpt-oss-120b",
+  "prompt_version": "v1",
+  "input_cost_per_mtok": 0.15,
+  "output_cost_per_mtok": 0.6,
+  "started_at": "2026-10-26T09:06:52.655645Z",
+  "latency_ms": 3772,
+  "steps": [
+   {
+    "kind": "llm",
+    "name": "turn 1",
+    "args": {},
+    "summary": "1 tool call(s): get_diff",
+    "input_tokens": 503,
+    "output_tokens": 28,
+    "latency_ms": 3681,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "get_diff",
+    "args": {},
+    "summary": "27 files +277/-366, truncated",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 5,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 2",
+    "args": {},
+    "summary": "",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 75,
+    "error": "APIStatusError: Error code: 413 - {'error': {'message': 'Request too large for model `openai/gpt-oss-120b` in organization `org_01m100c2ckeknrr2djs6cev8yf` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Requested 8059, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+   }
+  ],
+  "input_tokens": 503,
+  "output_tokens": 28,
+  "tool_calls": 1,
+  "cost_usd": 0.000092
+ }
+}

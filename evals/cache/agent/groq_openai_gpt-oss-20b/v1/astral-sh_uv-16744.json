@@ -1,0 +1,178 @@
+{
+ "repo": "astral-sh/uv",
+ "number": 16744,
+ "label": 1,
+ "model": "groq:openai/gpt-oss-20b",
+ "prompt_version": "v1",
+ "stats": {
+  "additions": 117,
+  "deletions": 45,
+  "changed_files": 4
+ },
+ "verdict": {
+  "repo": "astral-sh/uv",
+  "pr_number": 16744,
+  "head_sha": "0d5edecf9528736eb871bd07da877c917823f380",
+  "level": "medium",
+  "score": 54,
+  "reason": null,
+  "assessment": {
+   "factors": [
+    {
+     "kind": "risky_paths",
+     "severity": 3,
+     "evidence": "\"pub enum RequirementsSource { ... Pep723Script(Box<Pep723ScriptSource>) ... }\" and \"pub struct Pep723ScriptSource {\" from get_diff patch"
+    },
+    {
+     "kind": "failing_ci",
+     "severity": 3,
+     "evidence": "\"state\":\"failing\",\"counts\":{\"success\":88,\"skipped\":12,\"failure\":2},\"failing\":[\"cargo test | ubuntu\",\"cargo test | windows\"] from ci_status"
+    }
+   ],
+   "summary": "The pull request introduces a public API change by adding a new `Pep723ScriptSource` struct and updating the `RequirementsSource` enum, which could impact downstream users. Coupled with currently failing CI tests on Ubuntu and Windows, this raises the risk of a deployment incident. Reviewers should prioritize resolving the CI failures and verifying backward compatibility before merging.",
+   "confidence": 0.8
+  },
+  "breakdown": {
+   "failing_ci": 30,
+   "risky_paths": 24,
+   "size_lines": 0,
+   "size_files": 0
+  },
+  "rules": [
+   "serious_failing_ci"
+  ]
+ },
+ "trace": {
+  "repo": "astral-sh/uv",
+  "pr_number": 16744,
+  "provider": "groq",
+  "model": "openai/gpt-oss-20b",
+  "prompt_version": "v1",
+  "input_cost_per_mtok": 0.075,
+  "output_cost_per_mtok": 0.3,
+  "started_at": "2026-10-28T02:41:30.714878Z",
+  "latency_ms": 63759,
+  "steps": [
+   {
+    "kind": "llm",
+    "name": "turn 1",
+    "args": {},
+    "summary": "1 tool call(s): get_diff",
+    "input_tokens": 503,
+    "output_tokens": 68,
+    "latency_ms": 633,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "get_diff",
+    "args": {
+     "author": "joshua-s",
+     "head_sha": "abc123",
+     "title": "Add support for --python-path and --python-env"
+    },
+    "summary": "4 files +117/-45, not truncated",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 1,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 2",
+    "args": {},
+    "summary": "1 tool call(s): file_churn",
+    "input_tokens": 3536,
+    "output_tokens": 98,
+    "latency_ms": 801,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "file_churn",
+    "args": {
+     "days": 90,
+     "paths": [
+      "crates/uv-requirements/src/sources.rs",
+      "crates/uv-requirements/src/specification.rs",
+      "crates/uv-scripts/src/lib.rs",
+      "crates/uv/tests/it/tool_run.rs"
+     ]
+    },
+    "summary": "4 paths over 90d; top: crates/uv-requirements/src/specification.rs=4, crates/uv-scripts/src/lib.rs=3, crates/uv/tests/it/tool_run.rs=2",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 6,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 3",
+    "args": {},
+    "summary": "1 tool call(s): author_history",
+    "input_tokens": 3756,
+    "output_tokens": 78,
+    "latency_ms": 821,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "author_history",
+    "args": {
+     "author": "terror"
+    },
+    "summary": "terror: 12 merged, 0 reverted",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 3,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 4",
+    "args": {},
+    "summary": "1 tool call(s): ci_status",
+    "input_tokens": 4207,
+    "output_tokens": 64,
+    "latency_ms": 31855,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "ci_status",
+    "args": {
+     "head_sha": "0d5edecf9528736eb871bd07da877c917823f380"
+    },
+    "summary": "failing: 102 check runs (cargo test | ubuntu, cargo test | windows)",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 8,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 5",
+    "args": {},
+    "summary": "done gathering",
+    "input_tokens": 4327,
+    "output_tokens": 1002,
+    "latency_ms": 7842,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "assessment",
+    "args": {},
+    "summary": "2 factor(s), confidence 0.8",
+    "input_tokens": 4759,
+    "output_tokens": 691,
+    "latency_ms": 21774,
+    "error": null
+   }
+  ],
+  "input_tokens": 21088,
+  "output_tokens": 2001,
+  "tool_calls": 4,
+  "cost_usd": 0.002182
+ }
+}

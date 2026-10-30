@@ -1,0 +1,184 @@
+{
+ "repo": "astral-sh/uv",
+ "number": 16548,
+ "label": 0,
+ "model": "groq:openai/gpt-oss-20b",
+ "prompt_version": "v1",
+ "stats": {
+  "additions": 46,
+  "deletions": 4,
+  "changed_files": 1
+ },
+ "verdict": {
+  "repo": "astral-sh/uv",
+  "pr_number": 16548,
+  "head_sha": "afb0b8f7f0394e19d545eb4ee1a27cb8304e028d",
+  "level": "medium",
+  "score": 42,
+  "reason": null,
+  "assessment": {
+   "factors": [
+    {
+     "kind": "large_diff",
+     "severity": 2,
+     "evidence": "{\"changed_files\":1,\"additions\":46,\"deletions\":4}"
+    },
+    {
+     "kind": "hot_files",
+     "severity": 2,
+     "evidence": "{\"commits\":6}"
+    },
+    {
+     "kind": "new_author",
+     "severity": 1,
+     "evidence": "{\"is_new_author\":true}"
+    },
+    {
+     "kind": "risky_paths",
+     "severity": 2,
+     "evidence": "{\"filename\":\"crates/uv-build-backend/src/metadata.rs\"}"
+    }
+   ],
+   "summary": "This PR introduces a new type to preserve original package names in metadata and adds a test for uppercase names. It modifies a file that has seen moderate recent activity and is authored by a newcomer, but all CI checks pass.",
+   "confidence": 0.8
+  },
+  "breakdown": {
+   "hot_files": 10,
+   "large_diff": 12,
+   "new_author": 4,
+   "risky_paths": 16,
+   "size_lines": 0,
+   "size_files": 0
+  },
+  "rules": []
+ },
+ "trace": {
+  "repo": "astral-sh/uv",
+  "pr_number": 16548,
+  "provider": "groq",
+  "model": "openai/gpt-oss-20b",
+  "prompt_version": "v1",
+  "input_cost_per_mtok": 0.075,
+  "output_cost_per_mtok": 0.3,
+  "started_at": "2026-10-28T02:59:58.288392Z",
+  "latency_ms": 39224,
+  "steps": [
+   {
+    "kind": "llm",
+    "name": "turn 1",
+    "args": {},
+    "summary": "1 tool call(s): get_diff",
+    "input_tokens": 503,
+    "output_tokens": 33,
+    "latency_ms": 496,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "get_diff",
+    "args": {
+     "": ""
+    },
+    "summary": "1 files +46/-4, not truncated",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 0,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 2",
+    "args": {},
+    "summary": "1 tool call(s): file_churn",
+    "input_tokens": 1539,
+    "output_tokens": 48,
+    "latency_ms": 14380,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "file_churn",
+    "args": {
+     "days": 90,
+     "paths": [
+      "crates/uv-build-backend/src/metadata.rs"
+     ]
+    },
+    "summary": "1 paths over 90d; top: crates/uv-build-backend/src/metadata.rs=6",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 3,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 3",
+    "args": {},
+    "summary": "1 tool call(s): author_history",
+    "input_tokens": 1660,
+    "output_tokens": 31,
+    "latency_ms": 601,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "author_history",
+    "args": {
+     "author": "caschb"
+    },
+    "summary": "caschb: 0 merged, 0 reverted",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 1837,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 4",
+    "args": {},
+    "summary": "1 tool call(s): ci_status",
+    "input_tokens": 1746,
+    "output_tokens": 118,
+    "latency_ms": 329,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "ci_status",
+    "args": {
+     "head_sha": "afb0b8f7f0394e19d545eb4ee1a27cb8304e028d",
+     "repo": "astral-sh/uv"
+    },
+    "summary": "passing: 100 check runs",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 874,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 5",
+    "args": {},
+    "summary": "done gathering",
+    "input_tokens": 1876,
+    "output_tokens": 563,
+    "latency_ms": 1227,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "assessment",
+    "args": {},
+    "summary": "4 factor(s), confidence 0.8",
+    "input_tokens": 2315,
+    "output_tokens": 1246,
+    "latency_ms": 19474,
+    "error": null
+   }
+  ],
+  "input_tokens": 9639,
+  "output_tokens": 2039,
+  "tool_calls": 4,
+  "cost_usd": 0.001335
+ }
+}

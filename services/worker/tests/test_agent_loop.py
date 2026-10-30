@@ -2,6 +2,8 @@
 
 import asyncio
 
+import httpx
+import openai
 import pytest
 from agent.loop import Agent, Limits
 from agent.toolbox import make_toolbox
@@ -173,3 +175,43 @@ async def test_strict_structured_output_where_the_provider_supports_it(fake_llm,
     await agent.run()
 
     assert seen == {"strict": True}
+
+
+def _rejected(code: str) -> openai.BadRequestError:
+    """What Groq raises when its server-side check rejects a generation."""
+    request = httpx.Request("POST", "https://api.groq.com/openai/v1/chat/completions")
+    message = f"Error code: 400 - {{'error': {{'code': '{code}', 'failed_generation': '{{'}}}}"
+    return openai.BadRequestError(message, response=httpx.Response(400, request=request), body=None)
+
+
+async def test_rejected_generations_get_one_retry(github, recorded_github, fake_llm, llm_reply):
+    llm = fake_llm(
+        _rejected("tool_use_failed"),
+        llm_reply.text("done"),
+        _rejected("json_validate_failed"),
+        llm_reply.text(GOOD),
+    )
+    agent = _agent(llm, github)
+
+    assessment = await agent.run()
+
+    assert assessment.factors[0].kind == "failing_ci"
+    turn, first, retry = agent.trace.steps
+    assert turn.error == "provider rejected the generation (tool_use_failed); retried"
+    assert first.error.startswith("invalid assessment: the provider rejected it (json_validate")
+    assert (retry.name, retry.error) == ("assessment retry", None)
+    assert "json_validate_failed" in llm.calls[-1][-1].content  # the retry says what went wrong
+
+
+async def test_a_second_rejection_still_fails(github, recorded_github, fake_llm, llm_reply):
+    llm = fake_llm(_rejected("tool_use_failed"), _rejected("tool_use_failed"))
+
+    with pytest.raises(openai.BadRequestError):
+        await _agent(llm, github).run()
+
+
+async def test_other_bad_requests_are_not_retried(github, recorded_github, fake_llm):
+    llm = fake_llm(_rejected("context_length_exceeded"), _rejected("tool_use_failed"))
+
+    with pytest.raises(openai.BadRequestError, match="context_length_exceeded"):
+        await _agent(llm, github).run()

@@ -28,6 +28,7 @@ class Trace(BaseModel):
     pr_number: int
     provider: str
     model: str
+    prompt_version: str = "v1"
     input_cost_per_mtok: float = 0.0
     output_cost_per_mtok: float = 0.0
     started_at: datetime = Field(default_factory=_now)

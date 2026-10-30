@@ -1,0 +1,167 @@
+{
+ "repo": "pydantic/pydantic",
+ "number": 12459,
+ "label": 1,
+ "model": "groq:openai/gpt-oss-120b",
+ "prompt_version": "v1",
+ "stats": {
+  "additions": 1,
+  "deletions": 9,
+  "changed_files": 1
+ },
+ "verdict": {
+  "repo": "pydantic/pydantic",
+  "pr_number": 12459,
+  "head_sha": "75cf93c5a07d8f6668977588d6d675583d4fd29d",
+  "level": "low",
+  "score": 11,
+  "reason": null,
+  "assessment": {
+   "factors": [
+    {
+     "kind": "config_change",
+     "severity": 1,
+     "evidence": "Diff shows removal of three secret environment variables (TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_ACCESS_TOKEN_SECRET) and simplification of the Tweepy client call in .github/workflows/ci.yml【get_diff】"
+    },
+    {
+     "kind": "hot_files",
+     "severity": 1,
+     "evidence": "File churn data indicates .github/workflows/ci.yml was modified 9 times in the last 90 days【file_churn】"
+    }
+   ],
+   "summary": "The PR only updates the CI workflow, simplifying a Tweepy client call and removing unused Twitter secrets. CI checks pass and the author has prior merged contributions, so the likelihood of a production incident is very low.",
+   "confidence": 0.95
+  },
+  "breakdown": {
+   "config_change": 6,
+   "hot_files": 5,
+   "size_lines": 0,
+   "size_files": 0
+  },
+  "rules": []
+ },
+ "trace": {
+  "repo": "pydantic/pydantic",
+  "pr_number": 12459,
+  "provider": "groq",
+  "model": "openai/gpt-oss-120b",
+  "prompt_version": "v1",
+  "input_cost_per_mtok": 0.15,
+  "output_cost_per_mtok": 0.6,
+  "started_at": "2026-10-26T09:19:21.433474Z",
+  "latency_ms": 39721,
+  "steps": [
+   {
+    "kind": "llm",
+    "name": "turn 1",
+    "args": {},
+    "summary": "1 tool call(s): get_diff",
+    "input_tokens": 504,
+    "output_tokens": 42,
+    "latency_ms": 685,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "get_diff",
+    "args": {},
+    "summary": "1 files +1/-9, not truncated",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 1,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 2",
+    "args": {},
+    "summary": "1 tool call(s): file_churn",
+    "input_tokens": 939,
+    "output_tokens": 71,
+    "latency_ms": 4734,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "file_churn",
+    "args": {
+     "days": 90,
+     "paths": [
+      ".github/workflows/ci.yml"
+     ]
+    },
+    "summary": "1 paths over 90d; top: .github/workflows/ci.yml=9",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 566,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 3",
+    "args": {},
+    "summary": "1 tool call(s): author_history",
+    "input_tokens": 1054,
+    "output_tokens": 64,
+    "latency_ms": 7876,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "author_history",
+    "args": {
+     "author": "DouweM"
+    },
+    "summary": "DouweM: 4 merged, 0 reverted",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 1606,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 4",
+    "args": {},
+    "summary": "1 tool call(s): ci_status",
+    "input_tokens": 1291,
+    "output_tokens": 133,
+    "latency_ms": 8986,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "ci_status",
+    "args": {},
+    "summary": "passing: 67 check runs",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 856,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 5",
+    "args": {},
+    "summary": "done gathering",
+    "input_tokens": 1376,
+    "output_tokens": 656,
+    "latency_ms": 10609,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "assessment",
+    "args": {},
+    "summary": "2 factor(s), confidence 0.95",
+    "input_tokens": 1860,
+    "output_tokens": 577,
+    "latency_ms": 3795,
+    "error": null
+   }
+  ],
+  "input_tokens": 7024,
+  "output_tokens": 1543,
+  "tool_calls": 4,
+  "cost_usd": 0.001979
+ }
+}

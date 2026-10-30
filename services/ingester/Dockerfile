@@ -15,6 +15,7 @@ COPY libs/common/pyproject.toml libs/common/
 # Every workspace member's pyproject, or uv can't resolve the lockfile.
 COPY services/ingester/pyproject.toml services/ingester/
 COPY services/worker/pyproject.toml services/worker/
+COPY services/demoapp/pyproject.toml services/demoapp/
 RUN uv sync --frozen --no-dev --package ingester --no-install-workspace
 
 COPY libs/common libs/common

@@ -17,6 +17,7 @@ from worker.settings import WorkerSettings
 from agent.assessment import RiskAssessment
 from agent.github import GitHubClient, GitHubError, GitHubRateLimited
 from agent.loop import Agent, AssessmentParseError, Limits, TokenBudgetExceeded
+from agent.prompts import load_prompt
 from agent.scoring import DiffStats, score
 from agent.toolbox import make_toolbox
 from agent.tools import get_diff
@@ -107,13 +108,17 @@ async def assess_pr(
     *,
     can_retry: bool = False,
     attempt: int = 1,
+    point_in_time: bool = False,
 ) -> AgentRun:
+    """`point_in_time` is for evals: see make_toolbox."""
     limits = limits_from(settings)
+    prompt = load_prompt(settings.prompt_version)
     trace = Trace(
         repo=repo,
         pr_number=pr_number,
         provider=settings.llm_provider,
         model=settings.llm_model or type(llm).__name__,
+        prompt_version=prompt.version,
         input_cost_per_mtok=settings.llm_input_cost_per_mtok,
         output_cost_per_mtok=settings.llm_output_cost_per_mtok,
     )
@@ -126,7 +131,8 @@ async def assess_pr(
         stats = DiffStats(
             additions=diff.additions, deletions=diff.deletions, changed_files=diff.changed_files
         )
-        agent = Agent(llm, make_toolbox(gh, repo, pr_number), trace, limits)
+        toolbox = make_toolbox(gh, repo, pr_number, point_in_time=point_in_time)
+        agent = Agent(llm, toolbox, trace, limits, prompt)
         assessment = await agent.run()
     except Exception as exc:
         if _is_rate_limit(exc):

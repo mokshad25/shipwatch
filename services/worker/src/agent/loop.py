@@ -18,13 +18,26 @@ from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, System
 from pydantic import ValidationError
 
 from agent.assessment import RiskAssessment
-from agent.prompts import FINAL_INSTRUCTION, SYSTEM_PROMPT
+from agent.prompts import Prompt, load_prompt
 from agent.toolbox import AgentTool
 from agent.trace import SKIPPED, Trace, TraceStep
 
 
 class AssessmentParseError(Exception):
     """The model's assessment failed validation twice (first try and one retry)."""
+
+
+# Groq answers some malformed generations with HTTP 400 instead of returning them: a broken tool
+# call, or JSON its server-side schema check rejected. That is the model's mistake, not ours, so it
+# gets the same single retry as output that fails our own validation.
+_REJECTED_GENERATION = ("json_validate_failed", "tool_use_failed", "output_parse_failed")
+
+
+def _rejected_generation(exc: Exception) -> str | None:
+    """The provider's error code if `exc` is a rejected generation, else None."""
+    if getattr(exc, "status_code", None) != 400:
+        return None
+    return next((code for code in _REJECTED_GENERATION if code in str(exc)), None)
 
 
 class TokenBudgetExceeded(Exception):
@@ -48,7 +61,7 @@ class Evidence:
     results: list[tuple[str, dict[str, Any], str]] = field(default_factory=list)
     notes: str = ""
 
-    def render(self, repo: str, pr_number: int) -> str:
+    def render(self, repo: str, pr_number: int, final_instruction: str) -> str:
         parts = [f"Pull request {repo}#{pr_number}. Tool results, in the order you called them:"]
         for name, args, output in self.results:
             parts.append(f"### {name}({json.dumps(args, sort_keys=True)})\n{output}")
@@ -56,7 +69,7 @@ class Evidence:
             parts.append("(no tool results)")
         if self.notes:
             parts.append(f"### Your analysis\n{self.notes}")
-        parts.append(FINAL_INSTRUCTION)
+        parts.append(final_instruction)
         return "\n\n".join(parts)
 
 
@@ -83,11 +96,14 @@ class Agent:
         tools: dict[str, AgentTool],
         trace: Trace,
         limits: Limits = Limits(),  # noqa: B008 (frozen dataclass)
+        prompt: Prompt | None = None,
     ) -> None:
         self.llm = llm
         self.tools = tools
         self.trace = trace
         self.limits = limits
+        self.prompt = prompt or load_prompt()
+        trace.prompt_version = self.prompt.version
 
     async def run(self) -> RiskAssessment:
         """Raises TimeoutError, TokenBudgetExceeded, AssessmentParseError, or whatever an LLM or
@@ -108,7 +124,7 @@ class Agent:
     async def _gather(self) -> Evidence:
         model = self.llm.bind_tools([t.schema() for t in self.tools.values()])
         messages: list[BaseMessage] = [
-            SystemMessage(SYSTEM_PROMPT),
+            SystemMessage(self.prompt.system),
             HumanMessage(
                 f"Review pull request {self.trace.repo}#{self.trace.pr_number} for deployment risk."
             ),
@@ -119,7 +135,7 @@ class Agent:
         while True:
             turn += 1
             with self.trace.step("llm", f"turn {turn}") as step:
-                ai = await model.ainvoke(messages)
+                ai = await self._invoke_turn(model, messages, step)
                 _usage(step, ai)
                 step.summary = (
                     f"{len(ai.tool_calls)} tool call(s): "
@@ -146,6 +162,16 @@ class Agent:
                 messages.append(ToolMessage(output, tool_call_id=call["id"]))
             if calls >= self.limits.max_tool_calls:
                 return evidence
+
+    async def _invoke_turn(self, model: Any, messages: list[BaseMessage], step: TraceStep) -> Any:
+        """One tool-phase call, retried once if the provider rejected the generation."""
+        try:
+            return await model.ainvoke(messages)
+        except Exception as exc:
+            if not (code := _rejected_generation(exc)):
+                raise
+            step.error = f"provider rejected the generation ({code}); retried"
+            return await model.ainvoke(messages)
 
     async def _call_tool(self, call: dict[str, Any]) -> str:
         """Run one tool call. Bad arguments or an unknown tool go back to the model as an error
@@ -177,14 +203,21 @@ class Agent:
             RiskAssessment, method="json_schema", include_raw=True, **strict
         )
         messages: list[BaseMessage] = [
-            SystemMessage(SYSTEM_PROMPT),
-            HumanMessage(evidence.render(self.trace.repo, self.trace.pr_number)),
+            SystemMessage(self.prompt.system),
+            HumanMessage(evidence.render(self.trace.repo, self.trace.pr_number, self.prompt.final)),
         ]
         for attempt in (1, 2):
             name = "assessment" if attempt == 1 else "assessment retry"
             with self.trace.step("llm", name) as step:
-                out = await structured.ainvoke(messages)
-                _usage(step, out["raw"])
+                try:
+                    out = await structured.ainvoke(messages)
+                except Exception as exc:
+                    if not (code := _rejected_generation(exc)):
+                        raise
+                    rejected = f"the provider rejected it ({code}): {exc}"[:1000]
+                    out = {"raw": None, "parsed": None, "parsing_error": rejected}
+                else:
+                    _usage(step, out["raw"])
                 error = out["parsing_error"]
                 parsed = out["parsed"]
                 if error is None and parsed is not None:

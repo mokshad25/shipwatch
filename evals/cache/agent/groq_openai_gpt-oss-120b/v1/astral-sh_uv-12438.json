@@ -1,0 +1,168 @@
+{
+ "repo": "astral-sh/uv",
+ "number": 12438,
+ "label": 1,
+ "model": "groq:openai/gpt-oss-120b",
+ "prompt_version": "v1",
+ "stats": {
+  "additions": 86,
+  "deletions": 0,
+  "changed_files": 2
+ },
+ "verdict": {
+  "repo": "astral-sh/uv",
+  "pr_number": 12438,
+  "head_sha": "10ee80ba6fb63b2ed1dc7947c79bb88fe7569eb2",
+  "level": "medium",
+  "score": 30,
+  "reason": null,
+  "assessment": {
+   "factors": [
+    {
+     "kind": "hot_files",
+     "severity": 2,
+     "evidence": "file_churn output shows \"crates/uv/tests/it/pip_install.rs\" has 43 commits in the last 90 days, indicating a hot file: {\"crates/uv/tests/it/pip_install.rs\":{\"commits\":43,\"capped\":false}}"
+    },
+    {
+     "kind": "failing_ci",
+     "severity": 2,
+     "evidence": "ci_status output reports no checks for the head SHA: {\"total\":0,\"state\":\"none\",\"counts\":{},\"failing\":[]}"
+    }
+   ],
+   "summary": "The PR adds a small, well‑scoped regex and a matching error case plus a new integration test. While the test file is frequently changed and CI checks are absent, the author’s strong track record and the limited code impact keep the deployment risk low.",
+   "confidence": 0.9
+  },
+  "breakdown": {
+   "failing_ci": 20,
+   "hot_files": 10,
+   "size_lines": 0,
+   "size_files": 0
+  },
+  "rules": []
+ },
+ "trace": {
+  "repo": "astral-sh/uv",
+  "pr_number": 12438,
+  "provider": "groq",
+  "model": "openai/gpt-oss-120b",
+  "prompt_version": "v1",
+  "input_cost_per_mtok": 0.15,
+  "output_cost_per_mtok": 0.6,
+  "started_at": "2026-10-26T09:07:32.107759Z",
+  "latency_ms": 101356,
+  "steps": [
+   {
+    "kind": "llm",
+    "name": "turn 1",
+    "args": {},
+    "summary": "1 tool call(s): get_diff",
+    "input_tokens": 503,
+    "output_tokens": 28,
+    "latency_ms": 830,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "get_diff",
+    "args": {},
+    "summary": "2 files +86/-0, not truncated",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 1,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 2",
+    "args": {},
+    "summary": "1 tool call(s): file_churn",
+    "input_tokens": 2272,
+    "output_tokens": 93,
+    "latency_ms": 5927,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "file_churn",
+    "args": {
+     "days": 90,
+     "paths": [
+      "crates/uv-build-frontend/src/error.rs",
+      "crates/uv/tests/it/pip_install.rs"
+     ]
+    },
+    "summary": "2 paths over 90d; top: crates/uv/tests/it/pip_install.rs=43, crates/uv-build-frontend/src/error.rs=2",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 1080,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 3",
+    "args": {},
+    "summary": "1 tool call(s): author_history",
+    "input_tokens": 2426,
+    "output_tokens": 45,
+    "latency_ms": 15841,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "author_history",
+    "args": {
+     "author": "charliermarsh"
+    },
+    "summary": "charliermarsh: 2630 merged, 0 reverted",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 2609,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 4",
+    "args": {},
+    "summary": "1 tool call(s): ci_status",
+    "input_tokens": 2877,
+    "output_tokens": 140,
+    "latency_ms": 17020,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "ci_status",
+    "args": {},
+    "summary": "none: 0 check runs",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 551,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 5",
+    "args": {},
+    "summary": "done gathering",
+    "input_tokens": 2953,
+    "output_tokens": 612,
+    "latency_ms": 22968,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "assessment",
+    "args": {},
+    "summary": "2 factor(s), confidence 0.9",
+    "input_tokens": 3512,
+    "output_tokens": 633,
+    "latency_ms": 34487,
+    "error": null
+   }
+  ],
+  "input_tokens": 14543,
+  "output_tokens": 1551,
+  "tool_calls": 4,
+  "cost_usd": 0.003112
+ }
+}

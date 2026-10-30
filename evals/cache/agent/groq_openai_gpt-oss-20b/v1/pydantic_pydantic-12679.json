@@ -1,0 +1,168 @@
+{
+ "repo": "pydantic/pydantic",
+ "number": 12679,
+ "label": 0,
+ "model": "groq:openai/gpt-oss-20b",
+ "prompt_version": "v1",
+ "stats": {
+  "additions": 41,
+  "deletions": 6,
+  "changed_files": 2
+ },
+ "verdict": {
+  "repo": "pydantic/pydantic",
+  "pr_number": 12679,
+  "head_sha": "804680f74d6cd5a2af2b91cbb8a70b456ca9bf07",
+  "level": "low",
+  "score": 8,
+  "reason": null,
+  "assessment": {
+   "factors": [
+    {
+     "kind": "risky_paths",
+     "severity": 1,
+     "evidence": "@@ -99,7 +99,9 @@ def __copy__(self) -> Self:\\n-        _object_setattr(m, '__dict__', copy(self.__dict__))\\n+        new_dict = copy(self.__dict__)\\n+        new_dict['root'] = copy(self.__dict__['root'])\\n+        _object_setattr(m, '__dict__', new_dict)"
+    }
+   ],
+   "summary": "The PR updates RootModel copy logic, adding shallow copy of the root value and accompanying tests. All CI checks pass and the author has a clean history, indicating low deployment risk.",
+   "confidence": 1.0
+  },
+  "breakdown": {
+   "risky_paths": 8,
+   "size_lines": 0,
+   "size_files": 0
+  },
+  "rules": []
+ },
+ "trace": {
+  "repo": "pydantic/pydantic",
+  "pr_number": 12679,
+  "provider": "groq",
+  "model": "openai/gpt-oss-20b",
+  "prompt_version": "v1",
+  "input_cost_per_mtok": 0.075,
+  "output_cost_per_mtok": 0.3,
+  "started_at": "2026-10-28T05:53:02.297273Z",
+  "latency_ms": 43453,
+  "steps": [
+   {
+    "kind": "llm",
+    "name": "turn 1",
+    "args": {},
+    "summary": "1 tool call(s): get_diff",
+    "input_tokens": 504,
+    "output_tokens": 36,
+    "latency_ms": 338,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "get_diff",
+    "args": {
+     "": ""
+    },
+    "summary": "2 files +41/-6, not truncated",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 0,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 2",
+    "args": {},
+    "summary": "1 tool call(s): file_churn",
+    "input_tokens": 1306,
+    "output_tokens": 69,
+    "latency_ms": 511,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "file_churn",
+    "args": {
+     "days": 90,
+     "paths": [
+      "pydantic/root_model.py",
+      "tests/test_root_model.py"
+     ]
+    },
+    "summary": "2 paths over 90d; top: tests/test_root_model.py=1, pydantic/root_model.py=0",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 1086,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 3",
+    "args": {},
+    "summary": "1 tool call(s): author_history",
+    "input_tokens": 1441,
+    "output_tokens": 37,
+    "latency_ms": 567,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "author_history",
+    "args": {
+     "author": "YassinNouh21"
+    },
+    "summary": "YassinNouh21: 2 merged, 0 reverted",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 1471,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 4",
+    "args": {},
+    "summary": "1 tool call(s): ci_status",
+    "input_tokens": 1609,
+    "output_tokens": 68,
+    "latency_ms": 609,
+    "error": null
+   },
+   {
+    "kind": "tool",
+    "name": "ci_status",
+    "args": {
+     "ref": "main",
+     "repo": "pydantic/pydantic",
+     "sha": "804680f74d6cd5a2af2b91cbb8a70b456ca9bf07"
+    },
+    "summary": "passing: 67 check runs",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_ms": 755,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "turn 5",
+    "args": {},
+    "summary": "done gathering",
+    "input_tokens": 1741,
+    "output_tokens": 618,
+    "latency_ms": 11283,
+    "error": null
+   },
+   {
+    "kind": "llm",
+    "name": "assessment",
+    "args": {},
+    "summary": "1 factor(s), confidence 1.0",
+    "input_tokens": 2181,
+    "output_tokens": 1964,
+    "latency_ms": 26831,
+    "error": null
+   }
+  ],
+  "input_tokens": 8782,
+  "output_tokens": 2792,
+  "tool_calls": 4,
+  "cost_usd": 0.001496
+ }
+}

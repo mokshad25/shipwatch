@@ -3,18 +3,19 @@ name = "shipwatch"
 version = "0.1.0"
 description = "Shipwatch workspace root"
 requires-python = ">=3.12"
-dependencies = ["shipwatch-common", "ingester", "worker"]
+dependencies = ["shipwatch-common", "ingester", "worker", "demoapp"]
 
 [tool.uv]
 package = false
 
 [tool.uv.workspace]
-members = ["libs/common", "services/ingester", "services/worker"]
+members = ["libs/common", "services/ingester", "services/worker", "services/demoapp"]
 
 [tool.uv.sources]
 shipwatch-common = { workspace = true }
 ingester = { workspace = true }
 worker = { workspace = true }
+demoapp = { workspace = true }
 
 [dependency-groups]
 dev = [
@@ -33,8 +34,15 @@ target-version = "py312"
 select = ["E", "F", "I", "UP", "B", "SIM", "ASYNC"]
 
 [tool.pytest.ini_options]
-testpaths = ["libs/common/tests", "services/ingester/tests", "services/worker/tests"]
+testpaths = [
+    "libs/common/tests",
+    "services/ingester/tests",
+    "services/worker/tests",
+    "services/demoapp/tests",
+]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "session"
 asyncio_default_test_loop_scope = "session"
 addopts = "--import-mode=importlib"
+# evals/ holds scripts, not a package; its shared module (evalkit) is imported by name.
+pythonpath = ["evals"]

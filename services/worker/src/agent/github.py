@@ -8,7 +8,7 @@ from redis.asyncio import Redis
 from shipwatch_common.logging import get_logger
 from worker.settings import WorkerSettings
 
-from agent.cache import ResponseCache
+from agent.cache import FileResponseCache, ResponseCache
 
 log = get_logger(__name__)
 
@@ -29,7 +29,12 @@ class GitHubRateLimited(GitHubError):
 
 
 class GitHubClient:
-    def __init__(self, http: httpx.AsyncClient, cache: ResponseCache, token: str | None = None):
+    def __init__(
+        self,
+        http: httpx.AsyncClient,
+        cache: ResponseCache | FileResponseCache,
+        token: str | None = None,
+    ):
         self.http = http
         self.cache = cache
         self.headers = {
